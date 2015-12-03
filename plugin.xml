@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The plugin.dtd file is located in the OXYGEN_INSTALL_DIR/plugins directory -->
+<!DOCTYPE plugin SYSTEM "../plugin.dtd">
+
+<plugin
+ id="com.oxygenxml.sdksamples.webdav.WebdavServerPlugin"
+ name="WebAppWebdavServlet"
+ description="A plugin to enable a WebDAV server."
+ version="${project.version}"
+ vendor="SyncRO"
+ class="com.oxygenxml.sdksamples.webdav.WebdavServerPlugin">
+ <!--
+ <runtime>
+  <library name="target\webapp-webdav-server-plugin-18.0-SNAPSHOT.jar" scope="global"/>
+ </runtime>
+ -->
+  <runtime>
+  <librariesFolder name="lib"/>
+ </runtime>
+ 
+ <extension type="WebappServlet" 
+  class="com.oxygenxml.sdksamples.webdav.WebappWebdavServlet"/>
+ </plugin>
