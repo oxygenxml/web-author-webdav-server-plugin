@@ -9,11 +9,6 @@
  version="${project.version}"
  vendor="SyncRO"
  class="com.oxygenxml.sdksamples.webdav.WebdavServerPlugin">
- <!--
- <runtime>
-  <library name="target\webapp-webdav-server-plugin-18.0-SNAPSHOT.jar" scope="global"/>
- </runtime>
- -->
   <runtime>
   <librariesFolder name="lib"/>
  </runtime>

@@ -13,8 +13,6 @@ import ro.sync.ecss.extensions.api.webapp.plugin.WebappServletPluginExtension;
 
 /**
  * The wrapper class for the tomcat webdav servlet.
- * 
- * @author mihai_coanda
  */
 public class WebappWebdavServlet extends WebappServletPluginExtension {
   
