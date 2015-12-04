@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.catalina.servlets.WebdavServlet;
+import org.apache.http.HttpStatus;
 
 import ro.sync.ecss.extensions.api.webapp.plugin.WebappServletPluginExtension;
 
@@ -16,6 +17,7 @@ import ro.sync.ecss.extensions.api.webapp.plugin.WebappServletPluginExtension;
  */
 public class WebappWebdavServlet extends WebappServletPluginExtension {
   
+  private static final String WEBDAV_SERVER = "webdav-server";
   private WebdavServlet webdavServlet;
 
   @Override
@@ -30,6 +32,7 @@ public class WebappWebdavServlet extends WebappServletPluginExtension {
     
     webdavServlet = new WebdavServlet() {
       private static final long serialVersionUID = 1L;
+      private static final String METHOD_PROPFIND = "PROPFIND";
       // remove the servlet path from the relative path.
       @Override
       protected String getRelativePath(HttpServletRequest request) {
@@ -40,6 +43,18 @@ public class WebappWebdavServlet extends WebappServletPluginExtension {
         String workDir = "/" + getPath();
         return workDir + relativePath.substring(pathIndex);
       }    
+      
+      @Override
+      protected void service(HttpServletRequest req, HttpServletResponse resp)
+          throws ServletException, IOException {
+        // do not allow to list the workspace dir, only it's children should be listed.
+        if(req.getMethod().equals(METHOD_PROPFIND) && 
+            this.getRelativePath(req).equals("/" + WEBDAV_SERVER + "/")) {
+          resp.setStatus(HttpStatus.SC_METHOD_NOT_ALLOWED);
+        } else {
+          super.service(req, resp);
+        }
+      }
     };
 
     // wrapp the servlet config.
@@ -55,7 +70,7 @@ public class WebappWebdavServlet extends WebappServletPluginExtension {
   
   @Override
   public String getPath() {
-    return "webdav-server";
+    return WEBDAV_SERVER;
   }
 }
 
