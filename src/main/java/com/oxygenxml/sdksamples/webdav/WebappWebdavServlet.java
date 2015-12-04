@@ -21,8 +21,9 @@ public class WebappWebdavServlet extends WebappServletPluginExtension {
   @Override
   public void init() throws ServletException {
     // create the webdav workspace.
+    // the folder name must match the servletPath for filtering reasons.
     File webdavDir = new File(
-        getServletConfig().getServletContext().getRealPath(File.separator), "webdav");
+        getServletConfig().getServletContext().getRealPath(File.separator), getPath());
     if(!webdavDir.exists()) {
       webdavDir.mkdir();
     }
@@ -36,8 +37,8 @@ public class WebappWebdavServlet extends WebappServletPluginExtension {
         int pathIndex = ("/" + getPath()).length();
         // remove plugin servet path from relative path and add the workspace
         // dir as a prefix to limit browsing.
-        String workDirPath = "/webdav";
-        return workDirPath + relativePath.substring(pathIndex);
+        String workDir = "/" + getPath();
+        return workDir + relativePath.substring(pathIndex);
       }    
     };
 
