@@ -1,7 +1,12 @@
 package com.oxygenxml.sdksamples.webdav;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,29 +24,54 @@ public class WebappWebdavServlet extends WebappServletPluginExtension {
   
   private static final String WEBDAV_SERVER = "webdav-server";
   private WebdavServlet webdavServlet;
+  private static Map<String, String> pathsMapping;
+  /**
+   * plugin workspace folder.
+   */
+  private File webdavDir;
 
   @Override
   public void init() throws ServletException {
-    // create the webdav workspace.
-    // the folder name must match the servletPath for filtering reasons.
-    File webdavDir = new File(
-        getServletConfig().getServletContext().getRealPath(File.separator), getPath());
-    if(!webdavDir.exists()) {
-      webdavDir.mkdir();
-    }
+    loadMappings();
+    
+    // wrapp the servlet config.
+    this.config = new WebdavServletConfig(getServletConfig());
     
     webdavServlet = new WebdavServlet() {
       private static final long serialVersionUID = 1L;
       private static final String METHOD_PROPFIND = "PROPFIND";
-      // remove the servlet path from the relative path.
+
       @Override
       protected String getRelativePath(HttpServletRequest request) {
         String relativePath = super.getRelativePath(request);
-        int pathIndex = ("/" + getPath()).length();
-        // remove plugin servet path from relative path and add the workspace
-        // dir as a prefix to limit browsing.
-        String workDir = "/" + getPath();
-        return workDir + relativePath.substring(pathIndex);
+        // if the request is on root, list samples
+        String rootPath = "/" + getPath() + "/";
+        if(relativePath.equals(rootPath)) {
+          String rootMapping = pathsMapping.get("/");
+          if(rootMapping != null) {
+            relativePath += rootMapping;
+          }
+        } else if(relativePath.length() > rootPath.length()) {
+          // expand mapping
+          String path = relativePath.substring(rootPath.length());
+          int sepIndex = path.indexOf("/");
+          String pathEnd = "";
+          String mappKey = path;
+          if(sepIndex != -1) {
+            pathEnd = mappKey.substring(sepIndex);
+            mappKey = mappKey.substring(0, sepIndex);
+          } else {
+            mappKey = "/";
+            pathEnd = "/" + path;
+          }
+          String value = pathsMapping.get(mappKey);
+          if(value == null) {
+            // if no mapping found it means it is relative to root mapping.
+            value = pathsMapping.get("/") + "/" + mappKey;
+          }
+          relativePath = rootPath + value + pathEnd;
+        }
+        return relativePath;
       }    
       
       @Override
@@ -49,17 +79,54 @@ public class WebappWebdavServlet extends WebappServletPluginExtension {
           throws ServletException, IOException {
         // do not allow to list the workspace dir, only it's children should be listed.
         if(req.getMethod().equals(METHOD_PROPFIND) && 
-            this.getRelativePath(req).equals("/" + WEBDAV_SERVER + "/")) {
+            this.getRelativePath(req).equals("/" + getPath() + "/")) {
           resp.setStatus(HttpStatus.SC_METHOD_NOT_ALLOWED);
         } else {
           super.service(req, resp);
         }
       }
     };
-
-    // wrapp the servlet config.
-    this.config = new WebdavServletConfig(getServletConfig());
     webdavServlet.init(this.config);
+  }
+
+  private void loadMappings() {
+    webdavDir = new File(
+        getServletConfig().getServletContext().getRealPath(File.separator), getPath());
+
+    if(!webdavDir.exists()) {
+      webdavDir.mkdir();
+    } else {
+      // load the mappings.
+      pathsMapping = new java.util.HashMap<String, String>();
+      File samplesFolder = new File(webdavDir, "samples");
+      if(samplesFolder.exists()) {
+        // map the samples folder to root, can be overridden in properties file.
+        pathsMapping.put("/", "samples");
+      }
+      
+      Properties properties = new Properties();
+      File propertiesFile = new File(webdavDir, "mapping.properties");
+      if (propertiesFile.exists()) {
+        try {
+          InputStream in = new FileInputStream(propertiesFile);
+          properties.load(in);
+          in.close();
+        } catch (IOException e) {
+          System.out.println("WebDAV server plugin : Unable to load the mapping.properties file.");
+        }
+        Enumeration<Object> keys = properties.keys();
+        while (keys.hasMoreElements()) {
+          String param = (String) keys.nextElement();
+          pathsMapping.put(param,properties.getProperty(param));
+        }
+      } else {
+        try {
+          propertiesFile.createNewFile();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
   }
 
   @Override
@@ -73,5 +140,3 @@ public class WebappWebdavServlet extends WebappServletPluginExtension {
     return WEBDAV_SERVER;
   }
 }
-
-
