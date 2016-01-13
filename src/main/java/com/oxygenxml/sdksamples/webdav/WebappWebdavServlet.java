@@ -99,10 +99,11 @@ public class WebappWebdavServlet extends WebappServletPluginExtension {
       // load the mappings.
       pathsMapping = new java.util.HashMap<String, String>();
       File samplesFolder = new File(webdavDir, "samples");
-      if(samplesFolder.exists()) {
-        // map the samples folder to root, can be overridden in properties file.
-        pathsMapping.put("/", "samples");
+      if(!samplesFolder.exists()) {
+        samplesFolder.mkdir();
       }
+      // map the samples folder to root, can be overridden in properties file.
+      pathsMapping.put("/", "samples");
       
       Properties properties = new Properties();
       File propertiesFile = new File(webdavDir, "mapping.properties");
