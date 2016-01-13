@@ -89,43 +89,50 @@ public class WebappWebdavServlet extends WebappServletPluginExtension {
     webdavServlet.init(this.config);
   }
 
+  /**
+   * Load the user defined folder mappings.
+   */
   private void loadMappings() {
-    webdavDir = new File(
-        getServletConfig().getServletContext().getRealPath(File.separator), getPath());
+    webdavDir = new File(getServletConfig().getServletContext().getRealPath("/"),
+        getPath());
+    File propertiesFile = new File(webdavDir, "mapping.properties");
 
-    if(!webdavDir.exists()) {
+    if (!webdavDir.exists()) {
       webdavDir.mkdir();
-    } else {
-      // load the mappings.
-      pathsMapping = new java.util.HashMap<String, String>();
-      File samplesFolder = new File(webdavDir, "samples");
-      if(!samplesFolder.exists()) {
-        samplesFolder.mkdir();
+      try {
+        propertiesFile.createNewFile();
+      } catch (IOException e) {
+        System.out.println("could not create mappings.properties file");
       }
-      // map the samples folder to root, can be overridden in properties file.
-      pathsMapping.put("/", "samples");
-      
-      Properties properties = new Properties();
-      File propertiesFile = new File(webdavDir, "mapping.properties");
-      if (propertiesFile.exists()) {
-        try {
-          InputStream in = new FileInputStream(propertiesFile);
-          properties.load(in);
-          in.close();
-        } catch (IOException e) {
-          System.out.println("WebDAV server plugin : Unable to load the mapping.properties file.");
-        }
-        Enumeration<Object> keys = properties.keys();
-        while (keys.hasMoreElements()) {
-          String param = (String) keys.nextElement();
-          pathsMapping.put(param,properties.getProperty(param));
-        }
-      } else {
-        try {
-          propertiesFile.createNewFile();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
+    }
+    File samplesFolder = new File(webdavDir, "samples");
+    if (!samplesFolder.exists()) {
+      samplesFolder.mkdir();
+    }
+    
+    // map the samples folder to root, can be overridden in properties file.
+    pathsMapping = new java.util.HashMap<String, String>();
+    pathsMapping.put("/", "samples");
+    Properties properties = new Properties();
+    if (propertiesFile.exists()) {
+      try {
+        InputStream in = new FileInputStream(propertiesFile);
+        properties.load(in);
+        in.close();
+      } catch (IOException e) {
+        System.out.println(
+            "WebDAV server plugin : Unable to load the mapping.properties file.");
+      }
+      Enumeration<Object> keys = properties.keys();
+      while (keys.hasMoreElements()) {
+        String param = (String) keys.nextElement();
+        pathsMapping.put(param, properties.getProperty(param));
+      }
+    } else {
+      try {
+        propertiesFile.createNewFile();
+      } catch (IOException e) {
+        e.printStackTrace();
       }
     }
   }
