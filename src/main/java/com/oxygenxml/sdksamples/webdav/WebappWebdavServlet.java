@@ -105,14 +105,9 @@ public class WebappWebdavServlet extends WebappServletPluginExtension {
         System.out.println("could not create mappings.properties file");
       }
     }
-    File samplesFolder = new File(webdavDir, "samples");
-    if (!samplesFolder.exists()) {
-      samplesFolder.mkdir();
-    }
-    
     // map the samples folder to root, can be overridden in properties file.
     pathsMapping = new java.util.HashMap<String, String>();
-    pathsMapping.put("/", "samples");
+    
     Properties properties = new Properties();
     if (propertiesFile.exists()) {
       try {
@@ -134,6 +129,15 @@ public class WebappWebdavServlet extends WebappServletPluginExtension {
       } catch (IOException e) {
         e.printStackTrace();
       }
+    }
+    // if there is no ROOT mapping we map to the samples folder
+    // if there is no samples folder we create it.
+    if(pathsMapping.get("/") == null) {
+      File samplesFolder = new File(webdavDir, "samples");
+      if (!samplesFolder.exists()) {
+        samplesFolder.mkdir();
+      }
+      pathsMapping.put("/", "samples");
     }
   }
 
