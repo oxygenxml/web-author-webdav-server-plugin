@@ -96,14 +96,8 @@ public class WebappWebdavServlet extends WebappServletPluginExtension {
     webdavDir = new File(getServletConfig().getServletContext().getRealPath("/"),
         getPath());
     File propertiesFile = new File(webdavDir, "mapping.properties");
-
     if (!webdavDir.exists()) {
       webdavDir.mkdir();
-      try {
-        propertiesFile.createNewFile();
-      } catch (IOException e) {
-        System.out.println("could not create mappings.properties file");
-      }
     }
     // map the samples folder to root, can be overridden in properties file.
     pathsMapping = new java.util.HashMap<String, String>();

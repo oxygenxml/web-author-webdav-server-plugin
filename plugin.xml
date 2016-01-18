@@ -15,4 +15,11 @@
  
  <extension type="WebappServlet" 
   class="com.oxygenxml.sdksamples.webdav.WebappWebdavServlet"/>
+ <extension type="WebappServlet" 
+  class="com.oxygenxml.sdksamples.webdav.PublicConfigServlet"/>
+ <extension type="WebappServlet" role="config"
+  class="com.oxygenxml.sdksamples.webdav.ConfigWebdavServerExtension"/>
+ <extension type="WebappStaticResourcesFolder" 
+  path="resources/" href="webdav-server"/> 
+  
  </plugin>

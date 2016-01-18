@@ -13,5 +13,10 @@
 	<componentDescriptors>
 		<componentDescriptor>assemblyComponent.xml</componentDescriptor>
 	</componentDescriptors>
-	 
+	 <fileSets>
+     <fileSet>
+       <directory>resources</directory>
+       <outputDirectory>/resources</outputDirectory>
+     </fileSet>
+  </fileSets>  
 </assembly>
