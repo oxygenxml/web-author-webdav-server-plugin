@@ -1,5 +1,6 @@
 package com.oxygenxml.sdksamples.webdav;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +16,16 @@ public class ConfigWebdavServerExtension extends PluginConfigExtension {
   public void init() throws ServletException {
     super.init();
     Map<String, String> defaultOptions = new HashMap<String, String>();
-    defaultOptions.put(DISPLAY_SAMPLES, "on");
+    
+    File samplesDir = new File(getServletConfig().getServletContext().getRealPath("/"), "webdav-server/samples/");
+    File gardenia = new File(samplesDir.getPath() + "/dita/flowers/topics/flowers/gardenia.dita");
+    
+    if(gardenia.exists()) {
+      defaultOptions.put(DISPLAY_SAMPLES, "on");
+    } else {
+      // if the samples file does not exist by default we hide the Samples section.
+      defaultOptions.put(DISPLAY_SAMPLES, "off");
+    }
     this.setDefaultOptions(defaultOptions);
   }
 

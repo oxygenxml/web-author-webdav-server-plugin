@@ -35,8 +35,9 @@ public class PublicConfigServlet  extends WebappServletPluginExtension {
    * @return the public options JSon.
    */
   private String getPublicOptionsJson() {
+    String displaySamples = this.optionsStorage.getOption(ConfigWebdavServerExtension.DISPLAY_SAMPLES, "on");
     return "{" +
-        "\"display_samples\": \"" + this.optionsStorage.getOption(ConfigWebdavServerExtension.DISPLAY_SAMPLES, "on") + "\"" +
+        "\"display_samples\": \"" + displaySamples + "\"" +
       "}";
   }
   
