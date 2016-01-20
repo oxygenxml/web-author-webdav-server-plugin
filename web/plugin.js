@@ -12,7 +12,7 @@
   }
 
   var baseUrl = href.substring(0, endIndex + 1);
-  webdavServerPluginUrl = baseUrl + 'plugins-dispatcher/webdav-server/'
+  webdavServerPluginUrl = 'webdav-' + baseUrl + 'plugins-dispatcher/webdav-server/'
 
   // load samples thumbails.
   goog.events.listen(
