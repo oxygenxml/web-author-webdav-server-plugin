@@ -4,7 +4,7 @@
 
 <plugin
  id="com.oxygenxml.sdksamples.webdav.WebdavServerPlugin"
- name="WebAppWebdavServlet"
+ name="WebDAV Server"
  description="A plugin to enable a WebDAV server."
  version="${project.version}"
  vendor="SyncRO"
