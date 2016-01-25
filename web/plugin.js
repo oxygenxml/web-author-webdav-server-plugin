@@ -1,10 +1,4 @@
-
 (function () {
-  /**
-   * The global variable with the WebDAV server url.
-   */
-  webdavServerPluginUrl = null;
-
   var href = location.href;
   var endIndex = href.indexOf('/app/');
   if (endIndex == -1) {
@@ -12,7 +6,7 @@
   }
 
   var baseUrl = href.substring(0, endIndex + 1);
-  webdavServerPluginUrl = 'webdav-' + baseUrl + 'plugins-dispatcher/webdav-server/'
+  var webdavServerPluginUrl = 'webdav-' + baseUrl + 'plugins-dispatcher/webdav-server/';
 
   // load samples thumbails.
   goog.events.listen(
@@ -31,7 +25,7 @@
             displayWebdavSamples();
           }
         }
-      };
+      }
     });
 
   /**
@@ -48,13 +42,13 @@
     // samples types.
     var samples = ["DITA", "DITA Map", "DocBook", "XHTML", "TEI"];
     // samples urls
-    var sampleUrls = ['../../plugins-dispatcher/webdav-server/dita/flowers/topics/flowers/gardenia.dita',
-      '../../plugins-dispatcher/webdav-server/dita/flowers/flowers.ditamap',
-      '../../plugins-dispatcher/webdav-server/docbook/v5/sample.xml',
-      '../../plugins-dispatcher/webdav-server/xhtml/sample.xml',
-      '../../plugins-dispatcher/webdav-server/tei/TEI-P5.xml'];
+    var sampleUrls = ['dita/flowers/topics/flowers/gardenia.dita',
+      'dita/flowers/flowers.ditamap',
+      'docbook/v5/sample.xml',
+      'xhtml/sample.xml',
+      'tei/TEI-P5.xml'];
     // samples ditamaps
-    var ditamaps = ['../plugins-dispatcher/webdav-server/dita/flowers/flowers.ditamap', null, null, null, null];
+    var ditamaps = ['dita/flowers/flowers.ditamap', null, null, null, null];
 
     // construct the dom structure for the samples.
     var domHelper = new goog.dom.DomHelper();
@@ -85,7 +79,7 @@
         goog.bind(function (openUrl) {
           window.open(openUrl)
         }, this, openUrl));
-    };
+    }
 
     // add styles before adding the elements.
     addNewStylesheet(domHelper, titleCss);
@@ -94,8 +88,6 @@
     var container = document.getElementById('dashboard-container');
     container.appendChild(samplesContainer);
   }
-
-  var baseUrl = null;
 
   /**
    * Compute the document url depending on params.
@@ -107,26 +99,18 @@
    * @return {string} the document url.
    */
   function getUrl(docUrl, ditamapUrl, authorName) {
-    // compute the base url at first use.
-    if (!baseUrl) {
-      baseUrl = location.origin + location.pathname;
-      var end = baseUrl.indexOf("/app/oxygen.html");
-      if (end != -1) {
-        baseUrl = baseUrl.substring(0, end);
-      }
-      if (baseUrl.charAt(baseUrl.length - 1) != '/') {
-        baseUrl += '/';
-      }
-    }
     var urlStr = "oxygen.html?";
-    urlStr += 'url=' + encodeURIComponent((baseUrl + docUrl).replace('\\', '/')) + '&';
-    urlStr += 'showSave=true&';
+
+    urlStr += 'url=' + encodeURIComponent((webdavServerPluginUrl + docUrl).replace('\\', '/'));
+
+    urlStr += '&showSave=true';
     if (ditamapUrl) {
-      urlStr += 'ditamap=' + encodeURIComponent((baseUrl + ditamapUrl).replace('\\', '/')) + '&';
+      urlStr += '&ditamap=' + encodeURIComponent((webdavServerPluginUrl + ditamapUrl).replace('\\', '/')) + '&';
     }
-    urlStr += 'author=' + authorName;
+    urlStr += '&author=' + authorName;
+
     return urlStr;
-  };
+  }
 
   function addNewStylesheet(domHelper, dynamicCss) {
     var cssFormating = domHelper.createDom('style');
@@ -175,5 +159,5 @@
       '}';
 
     document.head.appendChild(cssFormating);
-  };
+  }
 })();
