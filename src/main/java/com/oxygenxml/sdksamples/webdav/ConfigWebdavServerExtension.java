@@ -25,6 +25,7 @@ public class ConfigWebdavServerExtension extends PluginConfigExtension {
     } else {
       // if the samples file does not exist by default we hide the Samples section.
       defaultOptions.put(DISPLAY_SAMPLES, "off");
+      setOption(DISPLAY_SAMPLES, "off");
     }
     this.setDefaultOptions(defaultOptions);
   }
