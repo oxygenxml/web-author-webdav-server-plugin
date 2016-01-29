@@ -1,9 +1,12 @@
 package com.oxygenxml.sdksamples.webdav;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
@@ -118,8 +121,12 @@ public class WebappWebdavServlet extends WebappServletPluginExtension {
         pathsMapping.put(param, properties.getProperty(param));
       }
     } else {
+      BufferedWriter writer = null;
       try {
-        propertiesFile.createNewFile();
+        writer = new BufferedWriter(
+            new OutputStreamWriter(new FileOutputStream(propertiesFile)));
+        writer.write("/ = samples");
+        writer.close();
       } catch (IOException e) {
         e.printStackTrace();
       }

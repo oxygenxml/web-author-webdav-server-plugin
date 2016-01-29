@@ -9,7 +9,7 @@
   var baseUrl = href.substring(0, endIndex + 1);
 
   // global variable with the server url.
-  window.webdavServerPluginUrl = 'webdav-' + baseUrl + 'plugins-dispatcher/webdav-server/';
+  window.webdavServerPluginUrl = baseUrl + 'plugins-dispatcher/webdav-server/';
 
   // load samples thumbails.
   goog.events.listen(
