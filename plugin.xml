@@ -6,7 +6,7 @@
  id="com.oxygenxml.sdksamples.webdav.WebdavServerPlugin"
  name="WebDAV Server"
  description="Runs a builtin WebDAV server with locking support."
- version="${project.version}"
+ version="${project.nosnapshot.version}"
  vendor="SyncRO"
  class="com.oxygenxml.sdksamples.webdav.WebdavServerPlugin">
   <runtime>

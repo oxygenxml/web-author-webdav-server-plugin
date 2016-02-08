@@ -7,7 +7,6 @@
   }
 
   var baseUrl = href.substring(0, endIndex + 1);
-
   // global variable with the server url.
   window.webdavServerPluginUrl = baseUrl + 'plugins-dispatcher/webdav-server/';
 
