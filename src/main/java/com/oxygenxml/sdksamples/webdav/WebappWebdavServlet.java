@@ -66,6 +66,12 @@ public class WebappWebdavServlet extends WebappServletPluginExtension {
           } else {
             mappKey = "/";
             pathEnd = "/" + path;
+            // try if another root is represented by the single path.
+            String mapping = pathsMapping.get(path);
+            if(mapping != null) {
+              mappKey = path;
+              pathEnd = "/";
+            }
           }
           String value = pathsMapping.get(mappKey);
           if(value == null) {
