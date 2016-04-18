@@ -11,6 +11,14 @@
     <oxygen.sdk.version>18.0-SNAPSHOT</oxygen.sdk.version>
   </properties>
 
+	<repositories>
+		<repository>
+			<id>oxygenxml</id>
+			<name>oXygen XML SDK Maven Repository</name>
+			<url>http://oxygenxml.com/maven/</url>
+		</repository>
+	</repositories>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
