@@ -5,11 +5,11 @@
     <artifactId>oxygen-superpom</artifactId>
     <version>18.1-SNAPSHOT</version>
   </parent>
-	<artifactId>webapp-webdav-server-plugin</artifactId>
+  <artifactId>webapp-webdav-server-plugin</artifactId>
 	
 	<properties> 
-    <oxygen.sdk.version>18.1-SNAPSHOT</oxygen.sdk.version>
-  </properties>
+    		<oxygen.sdk.version>18.1-SNAPSHOT</oxygen.sdk.version>
+    	</properties>
   	<repositories>
 		<repository>
 			<id>oxygenxml</id>
