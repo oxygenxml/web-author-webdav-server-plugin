@@ -10,7 +10,10 @@ import ro.sync.ecss.extensions.api.webapp.plugin.PluginConfigExtension;
 
 public class ConfigWebdavServerExtension extends PluginConfigExtension {
   
+  public final static String NAMESPACE = "webdav_server_plugin_";
+  
   public final static String DISPLAY_SAMPLES = "display_samples";
+  public final static String READONLY_MODE = NAMESPACE + "readonly_mode";
   
   @Override
   public void init() throws ServletException {
@@ -27,29 +30,42 @@ public class ConfigWebdavServerExtension extends PluginConfigExtension {
       defaultOptions.put(DISPLAY_SAMPLES, "off");
       setOption(DISPLAY_SAMPLES, "off");
     }
+    
+    defaultOptions.put(READONLY_MODE, "off");
+    
     this.setDefaultOptions(defaultOptions);
   }
 
   @Override
   public String getOptionsForm() {
-    String optionValue = getOption(DISPLAY_SAMPLES, "on");
-    boolean shouldDisplaySamples = "on".equals(optionValue);
+    String displaySamplesOption = getOption(DISPLAY_SAMPLES, "on");
+    boolean shouldDisplaySamples = "on".equals(displaySamplesOption);
+    boolean readonly = "on".equals(getOption(READONLY_MODE, "off"));
     
-    return "<div style='font-family:robotolight, Arial, Helvetica, sans-serif;font-size:0.85em;font-weight: lighter'>"
+    String form = "<div style='font-family:robotolight, Arial, Helvetica, sans-serif;font-size:0.85em;font-weight: lighter'>"
             + "<form style='text-align:left;line-height: 1.7em;'>"
+            // Display Samples
               + "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
-                + "<input name='display_samples' type='checkbox' value='on'" + 
+                + "<input name='" + DISPLAY_SAMPLES + "' type='checkbox' value='on'" + 
                       (shouldDisplaySamples ? " checked" : "") + "> Display samples"
+              + "</label>"
+              // READONLY
+              + "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
+                + "<input name='" + READONLY_MODE + "' type='checkbox' value='on'" + 
+                         (readonly ? " checked" : "") + "> Readonly mode"
               + "</label>"
             + "</form>"
           + "</div>";
+    
+    return form;
   }
 
   @Override
   public String getOptionsJson() {
     return
         "{" +
-          "\"display_samples\": \"" + getOption(DISPLAY_SAMPLES, "on") + "\"" +
+          "\"display_samples\": \"" + getOption(DISPLAY_SAMPLES, "on") + "\"," +
+          "\"" + READONLY_MODE + "\": \"" + getOption(READONLY_MODE, "off") + "\"" +
         "}";
   }
 
