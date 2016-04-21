@@ -5,16 +5,21 @@ import java.util.Enumeration;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
+import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
+import ro.sync.exml.workspace.api.options.WSOptionsStorage;
+
 /**
  * Wrapper class over a ServletConfig object.
  * 
  * @author mihai_coanda
  *
  */
-public class WebdavServletConfig implements ServletConfig{
+public class WebdavServletConfig implements ServletConfig {
   // the wrapped servlet config.
   private ServletConfig config;
 
+  private WSOptionsStorage optionsStorage;
+  
   /**
    * Represents a wrapper object over a ServletConfig, adding functionality.
    * 
@@ -22,6 +27,9 @@ public class WebdavServletConfig implements ServletConfig{
    */
   public WebdavServletConfig(ServletConfig config) {
     this.config = config;
+    
+    // load options from storage.
+    optionsStorage = PluginWorkspaceProvider.getPluginWorkspace().getOptionsStorage();
   }
 
   /**
@@ -45,7 +53,7 @@ public class WebdavServletConfig implements ServletConfig{
     if("listings".equals(name)) {
       return "true";
     } else if("readonly".equals(name)) {
-      return "false";
+      return Boolean.toString("on".equals(optionsStorage.getOption(ConfigWebdavServerExtension.READONLY_MODE , "off")));
     } else if("debug".equals(name)) {
       return "0";
     } else {
