@@ -13,20 +13,8 @@
   // load samples thumbails.
   goog.events.listen(
     workspace, sync.api.Workspace.EventType.DASHBOARD_LOADED, function() {
-      // get options
-      goog.net.XhrIo.send('../plugins-dispatcher/webdav-server-public-options/',
-        handleOptions, 'GET', null, {
-          'Accept': 'application/json'
-        });
-
-      function handleOptions(e) {
-        var request = e.target;
-        if (request.getStatus() == 200) {
-          var options = JSON.parse(request.getResponseText());
-          if (options.display_samples == "on") {
-            displayWebdavSamples();
-          }
-        }
+      if (sync.options.PluginsOptions.getClientOption('display_samples') == "on") {
+        displayWebdavSamples();
       }
     });
 
