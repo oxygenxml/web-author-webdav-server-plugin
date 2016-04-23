@@ -8,7 +8,7 @@
   <artifactId>webapp-webdav-server-plugin</artifactId>
 	
 	<properties> 
-    		<oxygen.sdk.version>18.1-SNAPSHOT</oxygen.sdk.version>
+    		<oxygen.sdk.version>${project.version}</oxygen.sdk.version>
     	</properties>
   	<repositories>
 		<repository>
