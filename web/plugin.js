@@ -91,14 +91,13 @@
   function getUrl(docUrl, ditamapUrl, authorName) {
     var urlStr = "oxygen.html?";
 
-    urlStr += 'url=' + encodeURIComponent((webdavServerPluginUrl + docUrl).replace('\\', '/'));
+    urlStr += 'url=webdav-' + encodeURIComponent((webdavServerPluginUrl + docUrl).replace('\\', '/'));
 
     urlStr += '&showSave=true';
     if (ditamapUrl) {
-      urlStr += '&ditamap=' + encodeURIComponent((webdavServerPluginUrl + ditamapUrl).replace('\\', '/')) + '&';
+      urlStr += '&ditamap=webdav-' + encodeURIComponent((webdavServerPluginUrl + ditamapUrl).replace('\\', '/')) + '&';
     }
     urlStr += '&author=' + authorName;
-
     return urlStr;
   }
 
