@@ -1,5 +1,5 @@
 (function () {
-
+  var readonlySaveDialog = null;
   var href = location.href;
   var endIndex = href.indexOf('/app/');
   if (endIndex == -1) {
@@ -17,6 +17,42 @@
         displayWebdavSamples();
       }
     });
+
+  /**
+   * Replace the save action when the the server is readonly.
+   */
+  if(decodeURIComponent(sync.util.getURLParameter('url'))
+      .indexOf('plugins-dispatcher/webdav-server/') != -1) {
+    goog.events.listen(workspace, sync.api.Workspace.EventType.EDITOR_LOADED, function(e) {
+      // load the css rules used in the editor.
+      loadEditorCSS();
+
+      var readonlyMode = sync.options.PluginsOptions.getClientOption('webdav_server_plugin_readonly_mode');
+      if(readonlyMode == 'on') {
+        var editor = e.editor;
+        goog.events.listen(editor, sync.api.Editor.EventTypes.ACTIONS_LOADED, function() {
+          var saveAction = editor.getActionsManager().getActionById('Author/Save');
+          // override save action
+          saveAction.actionPerformed = function(callback) {
+            // create the dialog
+            if(!readonlySaveDialog) {
+              readonlySaveDialog = workspace.createDialog();
+              readonlySaveDialog.setTitle('Readonly document');
+              readonlySaveDialog.getElement().innerHTML =
+                '<div id="readonly-save-dialog">' +
+                'The WebDAV server is in readonly mode.' +
+                '<p>This means that you can edit and download the document but you cannot save it to the server</p>' +
+                '<p>Use the <b>Download</b> action from the <b>More</b> submenu to save the document to your computer</p>' +
+                '</div>';
+              readonlySaveDialog.setButtonConfiguration(sync.api.Dialog.ButtonConfiguration.OK);
+            }
+            readonlySaveDialog.onSelect(callback);
+            readonlySaveDialog.show();
+          }
+        });
+      }
+    });
+  }
 
   /**
    * Display the webdav samples on the dashboard.
@@ -147,6 +183,22 @@
       'padding-bottom: 50px;' +
       '}';
 
+    document.head.appendChild(cssFormating);
+  }
+
+  function loadEditorCSS() {
+    var domHelper = new goog.dom.DomHelper();
+    var cssFormating = domHelper.createDom('style');
+
+    cssFormating.innerHTML =
+      '#readonly-save-dialog {' +
+        'content: " ";'+
+        'width: 400px;' +
+        'line-height: 1.2em;' +
+      '}' +
+      '#readonly-save-dialog {' +
+        'text-indent: 10px;' +
+      '}';
     document.head.appendChild(cssFormating);
   }
 })();
