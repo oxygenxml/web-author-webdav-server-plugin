@@ -56,7 +56,7 @@ public class ConfigWebdavServerExtension extends PluginConfigExtension {
         // READONLY
         + "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
         + "<input name='" + READONLY_MODE + "' type='checkbox' value='on'"
-        + (readonly ? " checked" : "") + "> Readonly mode" + "</label>"
+        + (readonly ? " checked" : "") + "> Read-only mode" + "</label>"
         + "</form>" + "</div>";
 
     return form;

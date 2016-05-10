@@ -40,7 +40,7 @@
               readonlySaveDialog.setTitle('Readonly document');
               readonlySaveDialog.getElement().innerHTML =
                 '<div id="readonly-save-dialog">' +
-                'The WebDAV server is in readonly mode.' +
+                'The WebDAV server is in read-only mode.' +
                 '<p>This means that you can edit and download the document but you cannot save it to the server</p>' +
                 '<p>Use the <b>Download</b> action from the <b>More</b> submenu to save the document to your computer</p>' +
                 '</div>';
