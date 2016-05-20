@@ -6,10 +6,14 @@
     endIndex = href.indexOf('/static/');
   }
 
-  var baseUrl = href.substring(0, endIndex + 1);
+  var baseUrl = href.substring(0, endIndex + 1) + 'plugins-dispatcher/webdav-server/';
   // global variable with the server url.
-  window.webdavServerPluginUrl = baseUrl + 'plugins-dispatcher/webdav-server/';
+  window.webdavServerPluginUrl = baseUrl;
 
+  // enforce the url if option enabled.
+  if('on' == sync.options.PluginsOptions.getClientOption('webdav_server_plugin_enforce_url')) {
+    window.webdav_connector_enforced_url = baseUrl;
+  }
   // load samples thumbails.
   goog.events.listen(
     workspace, sync.api.Workspace.EventType.DASHBOARD_LOADED, function() {
@@ -37,7 +41,7 @@
             // create the dialog
             if(!readonlySaveDialog) {
               readonlySaveDialog = workspace.createDialog();
-              readonlySaveDialog.setTitle('Readonly document');
+              readonlySaveDialog.setTitle('Read-only document');
               readonlySaveDialog.getElement().innerHTML =
                 '<div id="readonly-save-dialog">' +
                 'The WebDAV server is in read-only mode.' +
@@ -201,4 +205,10 @@
       '}';
     document.head.appendChild(cssFormating);
   }
+
+
+  var workspaceChooser = new sync.api.FileBrowsingDialog({initialUrl: 'file:/D:/'});
+  var openAction = new sync.actions.OpenAction(workspaceChooser);
+  workspace.getActionsManager().registerOpenAction(openAction);
+  workspace.setUrlChooser(workspaceChooser);
 })();
