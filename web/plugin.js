@@ -12,7 +12,7 @@
 
   // enforce the url if option enabled.
   if('on' == sync.options.PluginsOptions.getClientOption('webdav_server_plugin_enforce_url')) {
-    window.webdav_connector_enforced_url = baseUrl;
+    window.addEnforcedWebdavUrl(baseUrl);
   }
   // load samples thumbails.
   goog.events.listen(
@@ -205,10 +205,4 @@
       '}';
     document.head.appendChild(cssFormating);
   }
-
-
-  var workspaceChooser = new sync.api.FileBrowsingDialog({initialUrl: 'file:/D:/'});
-  var openAction = new sync.actions.OpenAction(workspaceChooser);
-  workspace.getActionsManager().registerOpenAction(openAction);
-  workspace.setUrlChooser(workspaceChooser);
 })();
