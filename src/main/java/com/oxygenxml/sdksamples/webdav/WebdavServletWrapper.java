@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
@@ -19,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.catalina.servlets.WebdavServlet;
 import org.apache.http.HttpStatus;
+import org.apache.log4j.Logger;
 
 import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 import ro.sync.exml.workspace.api.options.WSOptionsStorage;
@@ -29,6 +29,10 @@ import ro.sync.exml.workspace.api.options.WSOptionsStorage;
  *
  */
 public class WebdavServletWrapper extends WebdavServlet {
+  /**
+   * Logger for logging.
+   */
+  private static final Logger logger = Logger.getLogger(WebdavServletWrapper.class.getName());
 
   private static final long serialVersionUID = 1L;
   private static final String METHOD_PROPFIND = "PROPFIND";
@@ -72,10 +76,30 @@ public class WebdavServletWrapper extends WebdavServlet {
   }
 
   @Override
+  protected String getRelativePath(HttpServletRequest request, boolean allowEmptyPath) {
+    String relativePath = super.getRelativePath(request, allowEmptyPath);
+    return this.adjustRelativePath(relativePath);
+  }
+  
+  @Override
   protected String getRelativePath(HttpServletRequest request) {
     String relativePath = super.getRelativePath(request);
+    return this.adjustRelativePath(relativePath);
+  }
+  
+  /**
+   * Adjust the relative path to take our mappings into account.
+   * 
+   * @param relativePath The original relative path.
+   * 
+   * @return The adjusted relative path. 
+   */
+  private String adjustRelativePath(String relativePath) {
+    logger.debug("original relative path: " + relativePath);
+    
     // if the request is on root, list samples
     String rootPath = "/" + WebappWebdavServlet.WEBDAV_SERVER + "/";
+    logger.debug("root path: " + rootPath);
     if(relativePath.equals(rootPath)) {
       String rootMapping = pathsMapping.get("/");
       if(rootMapping != null) {
@@ -107,6 +131,8 @@ public class WebdavServletWrapper extends WebdavServlet {
       }
       relativePath = rootPath + value + pathEnd;
     }
+    
+    logger.debug("returned relative path: " + relativePath);
     return relativePath;
   }
 
@@ -151,8 +177,7 @@ public class WebdavServletWrapper extends WebdavServlet {
         properties.load(in);
         in.close();
       } catch (IOException e) {
-        System.out.println(
-            "WebDAV server plugin : Unable to load the mapping.properties file.");
+        logger.error("WebDAV server plugin : Unable to load the mapping.properties file.", e);
       }
       Enumeration<Object> keys = properties.keys();
       while (keys.hasMoreElements()) {
@@ -167,7 +192,7 @@ public class WebdavServletWrapper extends WebdavServlet {
         writer.write("/=samples");
         writer.close();
       } catch (IOException e) {
-        e.printStackTrace();
+        logger.error("WebDAV server plugin : Unable to write mapping.properties file.", e);
       }
     }
     // if there is no ROOT mapping we map to the samples folder
@@ -179,10 +204,7 @@ public class WebdavServletWrapper extends WebdavServlet {
       }
       pathsMapping.put("/", "samples");
     }
-    Collection<String> values = pathsMapping.values();
-    for(int i = 0; i < values.size(); i++) {
-      System.out.println("mapping ");
-    }
+    logger.debug("WebDAV mappings: " + pathsMapping);
   }
   
   /**
@@ -191,7 +213,7 @@ public class WebdavServletWrapper extends WebdavServlet {
    * @param readonly readonly mode.
    */
   public void setReadonly(boolean readonly) {
-    System.out.println("set readonly :" + readonly);
+    logger.debug("set readonly :" + readonly);
     this.readOnly = readonly;
   }
 }
