@@ -81,12 +81,6 @@ public class WebdavServletWrapper extends WebdavServlet {
     return this.adjustRelativePath(relativePath);
   }
   
-  @Override
-  protected String getRelativePath(HttpServletRequest request) {
-    String relativePath = super.getRelativePath(request);
-    return this.adjustRelativePath(relativePath);
-  }
-  
   /**
    * Adjust the relative path to take our mappings into account.
    * 
