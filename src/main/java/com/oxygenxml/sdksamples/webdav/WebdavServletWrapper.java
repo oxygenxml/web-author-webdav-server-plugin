@@ -11,6 +11,7 @@ import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -77,12 +78,45 @@ public class WebdavServletWrapper extends WebdavServlet {
 
   @Override
   protected String getRelativePath(HttpServletRequest request, boolean allowEmptyPath) {
-    String relativePath = super.getRelativePath(request, allowEmptyPath);
-    return this.adjustRelativePath(relativePath);
+    return this.getRelativePathExpandedMappings(request);
+  }
+  
+  @Override
+  protected String getRelativePath(HttpServletRequest request) {
+    return this.getRelativePathExpandedMappings(request);
   }
   
   /**
-   * Adjust the relative path to take our mappings into account.
+   * Computes the relative path from the request.
+   * 
+   * @param request the request.
+   * 
+   * @return the computed relative path with expanded mappings.
+   */
+  private String getRelativePathExpandedMappings(HttpServletRequest request) {
+    String pathInfo;
+
+    if (request.getAttribute(RequestDispatcher.INCLUDE_REQUEST_URI) != null) {
+        // For includes, get the info from the attributes
+        pathInfo = (String) request.getAttribute(RequestDispatcher.INCLUDE_PATH_INFO);
+    } else {
+        pathInfo = request.getPathInfo();
+    }
+
+    StringBuilder result = new StringBuilder();
+    if (pathInfo != null) {
+        result.append(pathInfo);
+    }
+    if (result.length() == 0) {
+        result.append('/');
+    }
+
+    return adjustRelativePath(
+        result.toString());
+  }
+  
+  /**
+   * Adjust the relative path to take the mappings into account.
    * 
    * @param relativePath The original relative path.
    * 
@@ -136,6 +170,9 @@ public class WebdavServletWrapper extends WebdavServlet {
 
     // do not allow to list the workspace dir, only it's children should be listed.
     if(req.getMethod().equals(METHOD_PROPFIND)) {
+      // TODO: maybe we should not support anything for root.
+      logger.debug("request relative path :" + this.getRelativePath(req));
+      
       if (this.getRelativePath(req).equals("/" + this.path + "/")) {
         // We do not support listing root folder.
         resp.setStatus(HttpStatus.SC_METHOD_NOT_ALLOWED);
