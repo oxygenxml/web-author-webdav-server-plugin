@@ -127,7 +127,6 @@ public class WebdavServletWrapper extends WebdavServlet {
     
     // if the request is on root, list samples
     String rootPath = "/" + WebappWebdavServlet.WEBDAV_SERVER + "/";
-    logger.debug("root path: " + rootPath);
     if(relativePath.equals(rootPath)) {
       String rootMapping = pathsMapping.get("/");
       if(rootMapping != null) {
@@ -170,9 +169,6 @@ public class WebdavServletWrapper extends WebdavServlet {
 
     // do not allow to list the workspace dir, only it's children should be listed.
     if(req.getMethod().equals(METHOD_PROPFIND)) {
-      // TODO: maybe we should not support anything for root.
-      logger.debug("request relative path :" + this.getRelativePath(req));
-      
       if (this.getRelativePath(req).equals("/" + this.path + "/")) {
         // We do not support listing root folder.
         resp.setStatus(HttpStatus.SC_METHOD_NOT_ALLOWED);
