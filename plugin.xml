@@ -8,9 +8,10 @@
  description="Runs a builtin WebDAV server with locking support."
  version="${project.nosnapshot.version}"
  vendor="SyncRO"
- class="com.oxygenxml.sdksamples.webdav.WebdavServerPlugin">
+ class="ro.sync.exml.plugin.Plugin">
   <runtime>
   <librariesFolder name="lib"/>
+  <library name="target/classes"/>
  </runtime>
  
  <extension type="WebappServlet" 
