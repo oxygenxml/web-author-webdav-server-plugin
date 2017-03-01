@@ -41,12 +41,12 @@
             // create the dialog
             if(!readonlySaveDialog) {
               readonlySaveDialog = workspace.createDialog();
-              readonlySaveDialog.setTitle('Read-only document');
+              readonlySaveDialog.setTitle(tr(msgs.READ_ONLY_DOCUMENT_));
               readonlySaveDialog.getElement().innerHTML =
                 '<div id="readonly-save-dialog">' +
-                'The WebDAV server is in read-only mode.' +
-                '<p>This means that you can edit and download the document but you cannot save it to the server</p>' +
-                '<p>Use the <b>Download</b> action from the <b>More</b> submenu to save the document to your computer</p>' +
+                  tr(msgs.WEBDAV_READ_ONLY_MODE_)
+                    .replace('{$P_START}', '<p>').replace('{$P_END}', '</p>')
+                    .replace('{$B_START}', '<b>').replace('{$B_END}', '</b>') +
                 '</div>';
               readonlySaveDialog.setButtonConfiguration(sync.api.Dialog.ButtonConfiguration.OK);
             }
@@ -101,7 +101,7 @@
       sampleLink.appendChild(image);
       samplesContainer.appendChild(sampleLink);
 
-      var author = sync.util.getURLParameter('author') || 'John Doe';
+      var author = sync.util.getURLParameter('author') || tr(msgs.ANONYMOUS_);
 
       // open the sample document in a new tab when the sample image is clicked.
       var openUrl = getUrl(sampleUrls[i], ditamaps[i], author);

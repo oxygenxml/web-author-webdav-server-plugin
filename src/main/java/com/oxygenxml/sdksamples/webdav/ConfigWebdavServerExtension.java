@@ -6,7 +6,11 @@ import java.util.Map;
 
 import javax.servlet.ServletException;
 
+import ro.sync.ecss.extensions.api.webapp.access.WebappPluginWorkspace;
 import ro.sync.ecss.extensions.api.webapp.plugin.PluginConfigExtension;
+import ro.sync.exml.workspace.api.PluginResourceBundle;
+import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
+import ro.sync.servlet.WebappTags;
 
 public class ConfigWebdavServerExtension extends PluginConfigExtension {
 
@@ -48,22 +52,24 @@ public class ConfigWebdavServerExtension extends PluginConfigExtension {
     boolean shouldDisplaySamples = "on".equals(displaySamplesOption);
     boolean readonly = "on".equals(getOption(READONLY_MODE, "off"));
     boolean enforce = "on".equals(getOption(ENFORCE_URL, "off"));
+    
+    PluginResourceBundle rb = ((WebappPluginWorkspace)PluginWorkspaceProvider.getPluginWorkspace()).getResourceBundle();
 
     String form = "<div style='font-family:robotolight, Arial, Helvetica, sans-serif;font-size:0.85em;font-weight: lighter'>"
         + "<form style='text-align:left;line-height: 1.7em;'>"
         // Display Samples
         + "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
         + "<input name='" + DISPLAY_SAMPLES + "' type='checkbox' value='on'"
-        + (shouldDisplaySamples ? " checked" : "") + "> Display samples"
+        + (shouldDisplaySamples ? " checked" : "") + "> " + rb.getMessage(WebappTags.DISPLAY_SAMPLES)
         + "</label>"
         // READONLY
         + "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
         + "<input name='" + READONLY_MODE + "' type='checkbox' value='on'"
-        + (readonly ? " checked" : "") + "> Read-only mode" + "</label>"
+        + (readonly ? " checked" : "") + "> " + rb.getMessage(WebappTags.READONLY_MODE) + "</label>"
         // Enforce url
         + "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
         + "<input name='" + ENFORCE_URL + "' type='checkbox' value='on'"
-        + (enforce ? " checked" : "") + "> Enforce Server" + "</label>"
+        + (enforce ? " checked" : "") + "> " + rb.getMessage(WebappTags.ENFORCE_SERVER) + "</label>"
         + "</form>" + "</div>";
 
     return form;
