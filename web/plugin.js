@@ -12,7 +12,7 @@
 
   // enforce the url if option enabled.
   if('on' == sync.options.PluginsOptions.getClientOption('webdav_server_plugin_enforce_url')) {
-    window.addEnforcedWebdavUrl(baseUrl);
+    window.addEnforcedWebdavUrl && window.addEnforcedWebdavUrl(baseUrl);
   }
   // load samples thumbails.
   goog.events.listen(
@@ -205,4 +205,27 @@
       '}';
     document.head.appendChild(cssFormating);
   }
+
+  setTimeout(function() {
+    var createActions = workspace.getActionsManager().getCreateActions();
+    for(var i = 0; i < createActions.length; i++) {
+      var createAction = createActions[i];
+      if(createAction.getActionId() == 'webdav-create-action') {
+        var urlChooser = createAction.urlChooser;
+        var originalRequestUrlInfo_ = urlChooser.requestUrlInfo_.bind(createAction);
+        urlChooser.requestUrlInfo_ = function(url, callback) {
+          if(url && url.indexOf('/plugins-dispatcher/webdav-server/') != -1) {
+            callback(url, {
+              rootUrl: url.substring(0, url.indexOf('/plugins-dispatcher/webdav-server/') + '/plugins-dispatcher/webdav-server/'.length),
+              type: url.endsWith('/') ? 'COLLECTION' : 'FILE'
+            });
+          } else {
+            originalRequestUrlInfo_(url, callback);
+          }
+        }.bind(urlChooser);
+
+        break;
+      }
+    }
+  }, 0);
 })();
