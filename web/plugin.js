@@ -212,7 +212,7 @@
       var createAction = createActions[i];
       if(createAction.getActionId() == 'webdav-create-action') {
         var urlChooser = createAction.urlChooser;
-        var originalRequestUrlInfo_ = urlChooser.requestUrlInfo_.bind(createAction);
+        var originalRequestUrlInfo_ = goog.bind(urlChooser.requestUrlInfo_, urlChooser);
         urlChooser.requestUrlInfo_ = function(url, callback) {
           if(url && url.indexOf('/plugins-dispatcher/webdav-server/') != -1) {
             callback(url, {
