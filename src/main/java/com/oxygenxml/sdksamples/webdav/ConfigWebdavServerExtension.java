@@ -82,7 +82,7 @@ public class ConfigWebdavServerExtension extends PluginConfigExtension {
         + "<input name='" + DISPLAY_SAMPLES + "' type='checkbox' value='on'"
         + (shouldDisplaySamples ? " checked" : "") + "> " + rb.getMessage(WebappTags.DISPLAY_SAMPLES)
         + "</label>";
-    if (isSecurityEnabled()) {
+    if (!isSecurityEnabled()) {
       // READONLY
       form += "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
           + "<input name='" + READONLY_MODE + "' type='checkbox' value='on'"
