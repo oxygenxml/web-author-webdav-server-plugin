@@ -14,10 +14,10 @@
   <library name="target/classes"/>
  </runtime>
  
- <extension type="WebappServlet" 
-  class="com.oxygenxml.sdksamples.webdav.WebappWebdavServlet"/>
  <extension type="WebappServlet" role="config"
   class="com.oxygenxml.sdksamples.webdav.ConfigWebdavServerExtension"/>
+ <extension type="WebappServlet" 
+  class="com.oxygenxml.sdksamples.webdav.WebappWebdavServlet"/>
  <extension type="WebappStaticResourcesFolder" 
   path="resources/" href="webdav-server"/> 
   

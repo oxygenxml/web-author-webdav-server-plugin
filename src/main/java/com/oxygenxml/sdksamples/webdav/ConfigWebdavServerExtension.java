@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.servlet.ServletException;
 
+import org.apache.log4j.Logger;
+
 import ro.sync.ecss.extensions.api.webapp.access.WebappPluginWorkspace;
 import ro.sync.ecss.extensions.api.webapp.plugin.PluginConfigExtension;
 import ro.sync.exml.workspace.api.PluginResourceBundle;
@@ -13,6 +15,11 @@ import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 import ro.sync.servlet.WebappTags;
 
 public class ConfigWebdavServerExtension extends PluginConfigExtension {
+
+  /**
+   * Logger for logging.
+   */
+  private static final Logger logger = Logger.getLogger(ConfigWebdavServerExtension.class.getName());
 
   public final static String NAMESPACE = "webdav_server_plugin_";
 
@@ -40,12 +47,25 @@ public class ConfigWebdavServerExtension extends PluginConfigExtension {
       setOption(DISPLAY_SAMPLES, "off");
     }
 
-    defaultOptions.put(READONLY_MODE, "off");
+    if (isSecurityEnabled()) {
+      defaultOptions.put(READONLY_MODE, "on");
+      setOption(READONLY_MODE, "on");
+      logger.warn("Webdav Server running in read-only mode because security is enabled.");
+    } else {
+      defaultOptions.put(READONLY_MODE, "off");
+    }
     defaultOptions.put(ENFORCE_URL, "off");
 
     this.setDefaultOptions(defaultOptions);
   }
 
+  /**
+   * @return <code>true</code> if security is enabled.
+   */
+  private boolean isSecurityEnabled() {
+    return System.getSecurityManager() != null;
+  }
+  
   @Override
   public String getOptionsForm() {
     String displaySamplesOption = getOption(DISPLAY_SAMPLES, "on");
@@ -61,13 +81,15 @@ public class ConfigWebdavServerExtension extends PluginConfigExtension {
         + "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
         + "<input name='" + DISPLAY_SAMPLES + "' type='checkbox' value='on'"
         + (shouldDisplaySamples ? " checked" : "") + "> " + rb.getMessage(WebappTags.DISPLAY_SAMPLES)
-        + "</label>"
-        // READONLY
-        + "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
-        + "<input name='" + READONLY_MODE + "' type='checkbox' value='on'"
-        + (readonly ? " checked" : "") + "> " + rb.getMessage(WebappTags.READONLY_MODE) + "</label>"
-        // Enforce url
-        + "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
+        + "</label>";
+    if (isSecurityEnabled()) {
+      // READONLY
+      form += "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
+          + "<input name='" + READONLY_MODE + "' type='checkbox' value='on'"
+          + (readonly ? " checked" : "") + "> " + rb.getMessage(WebappTags.READONLY_MODE) + "</label>";
+    }
+    // Enforce url
+    form = "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
         + "<input name='" + ENFORCE_URL + "' type='checkbox' value='on'"
         + (enforce ? " checked" : "") + "> " + rb.getMessage(WebappTags.ENFORCE_SERVER) + "</label>"
         + "</form>" + "</div>";

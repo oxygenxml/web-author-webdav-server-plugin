@@ -55,6 +55,8 @@ public class WebdavServletWrapper extends WebdavServlet {
     
     optionsStorage = PluginWorkspaceProvider.getPluginWorkspace().getOptionsStorage();
     
+    String option = optionsStorage.getOption(ConfigWebdavServerExtension.READONLY_MODE, "xxx");
+    this.readOnly = "on".equals(option);
     optionsStorage.addOptionListener(new ReadonlyOptionListener(this));
   }
   
@@ -191,7 +193,7 @@ public class WebdavServletWrapper extends WebdavServlet {
     webdavDir = new File(getServletConfig().getServletContext().getRealPath("/"),
         this.path);
     File propertiesFile = new File(webdavDir, "mapping.properties");
-    if (!webdavDir.exists()) {
+    if (!webdavDir.exists() && !this.readOnly) {
       webdavDir.mkdir();
     }
     // map the samples folder to root, can be overridden in properties file.
@@ -212,21 +214,23 @@ public class WebdavServletWrapper extends WebdavServlet {
         pathsMapping.put(param.trim(), properties.getProperty(param).trim());
       }
     } else {
-      BufferedWriter writer = null;
-      try {
-        writer = new BufferedWriter(
-            new OutputStreamWriter(new FileOutputStream(propertiesFile)));
-        writer.write("/=samples");
-        writer.close();
-      } catch (IOException e) {
-        logger.error("WebDAV server plugin : Unable to write mapping.properties file.", e);
+      if (!this.readOnly) {
+        BufferedWriter writer = null;
+        try {
+          writer = new BufferedWriter(
+              new OutputStreamWriter(new FileOutputStream(propertiesFile)));
+          writer.write("/=samples");
+          writer.close();
+        } catch (IOException e) {
+          logger.error("WebDAV server plugin : Unable to write mapping.properties file.", e);
+        }
       }
     }
     // if there is no ROOT mapping we map to the samples folder
     // if there is no samples folder we create it.
     if(pathsMapping.get("/") == null) {
       File samplesFolder = new File(webdavDir, "samples");
-      if (!samplesFolder.exists()) {
+      if (!samplesFolder.exists() && !this.readOnly) {
         samplesFolder.mkdir();
       }
       pathsMapping.put("/", "samples");
