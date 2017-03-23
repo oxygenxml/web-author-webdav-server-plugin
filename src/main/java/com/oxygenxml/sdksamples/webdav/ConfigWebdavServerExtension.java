@@ -12,7 +12,6 @@ import ro.sync.ecss.extensions.api.webapp.access.WebappPluginWorkspace;
 import ro.sync.ecss.extensions.api.webapp.plugin.PluginConfigExtension;
 import ro.sync.exml.workspace.api.PluginResourceBundle;
 import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
-import ro.sync.servlet.WebappTags;
 
 public class ConfigWebdavServerExtension extends PluginConfigExtension {
 
@@ -80,18 +79,18 @@ public class ConfigWebdavServerExtension extends PluginConfigExtension {
         // Display Samples
         + "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
         + "<input name='" + DISPLAY_SAMPLES + "' type='checkbox' value='on'"
-        + (shouldDisplaySamples ? " checked" : "") + "> " + rb.getMessage(WebappTags.DISPLAY_SAMPLES)
+        + (shouldDisplaySamples ? " checked" : "") + "> " + rb.getMessage(TranslationTags.DISPLAY_SAMPLES)
         + "</label>";
     if (!isSecurityEnabled()) {
       // READONLY
       form += "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
           + "<input name='" + READONLY_MODE + "' type='checkbox' value='on'"
-          + (readonly ? " checked" : "") + "> " + rb.getMessage(WebappTags.READONLY_MODE) + "</label>";
+          + (readonly ? " checked" : "") + "> " + rb.getMessage(TranslationTags.READONLY_MODE) + "</label>";
     }
     // Enforce url
     form = "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
         + "<input name='" + ENFORCE_URL + "' type='checkbox' value='on'"
-        + (enforce ? " checked" : "") + "> " + rb.getMessage(WebappTags.ENFORCE_SERVER) + "</label>"
+        + (enforce ? " checked" : "") + "> " + rb.getMessage(TranslationTags.ENFORCE_SERVER) + "</label>"
         + "</form>" + "</div>";
 
     return form;
