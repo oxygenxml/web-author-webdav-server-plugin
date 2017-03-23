@@ -1,4 +1,39 @@
 (function () {
+
+  var translations = {
+    "WEBDAV_READ_ONLY_MODE_": {
+      "en_US":"The WebDAV server is in read-only mode. " +
+        "{$P_START}This means that you can edit and download the document but you cannot save it to the server.{$P_END}" +
+        "{P_START}Use the {$B_START}Download{$B_END} action from the {$B_START}More{$B_END} submenu to save the document to your computer{$P_END}",
+      "de_DE":"Der WebDAV-Server befindet sich im schreibgeschützten Modus. " +
+        "{$P_START}Das bedeutet, dass Sie das Dokument bearbeiten und herunterladen, aber nicht auf dem Server speichern können.{$P_END}" +
+        "{P_START}Verwenden Sie die {$B_START}Download{$B_END} Aktion aus dem {$B_START}Mehr{$B_END} Untermenü, um das Dokument auf Ihrem Computer zu speichern{$P_END}",
+      "fr_FR":"Le serveur WebDAV est en mode lecture seule. " +
+        "{$P_START}Cela signifie que vous pouvez éditer et télécharger le document mais vous ne pouvez pas l'enregistrer sur le serveur.{$P_END}" +
+        "{P_START}Utilisez l'action {$B_START}Télécharger{$B_END} depuis le sous-menu {$B_START}Plus{$B_END} pour enregistrer le document sur votre ordinateur{$P_END}",
+      "ja_JP":"WebDAVサーバーは、読み取り専用モードです{$P_START}これは、ドキュメントを編集・ダウンロードできますが、サーバーに対して保存できないことを意味します。{$P_END}" +
+        "{P_START}{$B_START}その他{$B_END}サブメニューの{$B_START}ダウンロード{$B_END}操作を使用して、コンピュータ上にドキュメントを保存します{$P_END}",
+      "nl_NL":"De WebDAV-server bevindt zich in de alleen-lezen modus. " +
+        "{$P_START}Dit betekent dat u het document kunt bewerken en downloaden, maar niet kunt opslaan op de server.{$P_END}" +
+        "{P_START}Gebruik de actie {$B_START}Downloaden{$B_END} in het submenu {$B_START}Meer{$B_END} als u het document wilt opslaan op uw computer{$P_END}"
+    },
+    "READ_ONLY_DOCUMENT_": {
+      "en_US":"Read-only document",
+      "de_DE":"Schreibgeschütztes Dokument",
+      "fr_FR":"Document en lecture seule",
+      "ja_JP":"読み取り専用ドキュメント",
+      "nl_NL":"Alleen-lezen document"
+    },
+    "ANONYMOUS_": {
+      "en_US":"Anonymous",
+      "de_DE":"Anonym",
+      "fr_FR":"Anonyme",
+      "ja_JP":"匿名",
+      "nl_NL":"Anoniem"
+    }
+  };
+  sync.Translation.addTranslations(translations);
+
   var readonlySaveDialog = null;
   var href = location.href;
   var endIndex = href.indexOf('/app/');
@@ -44,9 +79,7 @@
               readonlySaveDialog.setTitle(tr(msgs.READ_ONLY_DOCUMENT_));
               readonlySaveDialog.getElement().innerHTML =
                 '<div id="readonly-save-dialog">' +
-                  tr(msgs.WEBDAV_READ_ONLY_MODE_)
-                    .replace('{$P_START}', '<p>').replace('{$P_END}', '</p>')
-                    .replace('{$B_START}', '<b>').replace('{$B_END}', '</b>') +
+                  tr(msgs.WEBDAV_READ_ONLY_MODE_, {'$P_START': '<p>', '$P_END': '</p>', '$B_START': '<b>', '$B_END': '</b>'}) +
                 '</div>';
               readonlySaveDialog.setButtonConfiguration(sync.api.Dialog.ButtonConfiguration.OK);
             }
