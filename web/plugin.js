@@ -30,6 +30,13 @@
       "fr_FR":"Anonyme",
       "ja_JP":"匿名",
       "nl_NL":"Anoniem"
+    },
+    "WEBDAV_SAMPLES_": {
+      "en_US":"Samples",
+      "de_DE":"Beispiele",
+      "fr_FR":"Exemples",
+      "ja_JP":"例",
+      "nl_NL":"Voorbeelden"
     }
   };
   sync.Translation.addTranslations(translations);
@@ -182,7 +189,7 @@
       '}' +
 
       '#samples-container:before{' +
-      'content:"Samples";' +
+      'content:"' + tr(msgs.WEBDAV_SAMPLES_) + '";' +
       '}' +
 
       '#samples-container {' +
