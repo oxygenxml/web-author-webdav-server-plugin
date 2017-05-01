@@ -88,7 +88,7 @@ public class ConfigWebdavServerExtension extends PluginConfigExtension {
           + (readonly ? " checked" : "") + "> " + rb.getMessage(TranslationTags.READONLY_MODE) + "</label>";
     }
     // Enforce url
-    form = "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
+    form += "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
         + "<input name='" + ENFORCE_URL + "' type='checkbox' value='on'"
         + (enforce ? " checked" : "") + "> " + rb.getMessage(TranslationTags.ENFORCE_SERVER) + "</label>"
         + "</form>" + "</div>";
