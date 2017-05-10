@@ -257,7 +257,7 @@
           if(url && url.indexOf('/plugins-dispatcher/webdav-server/') != -1) {
             callback(url, {
               rootUrl: url.substring(0, url.indexOf('/plugins-dispatcher/webdav-server/') + '/plugins-dispatcher/webdav-server/'.length),
-              type: url.endsWith('/') ? 'COLLECTION' : 'FILE'
+              type: goog.string.endsWith(url, '/') ? 'COLLECTION' : 'FILE'
             });
           } else {
             originalRequestUrlInfo_(url, callback);
