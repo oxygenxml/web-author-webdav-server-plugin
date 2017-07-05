@@ -12,7 +12,7 @@
 
   /** @override */
   sync.ui.SamplesTab.prototype.getTabHeaderImage = function () {
-    return '../static/images/Samples70.png';
+    return sync.util.computeHdpiIcon("../plugin-resources/webdav-server/Samples70.png");
   };
 
   /** @override */
