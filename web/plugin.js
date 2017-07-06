@@ -105,10 +105,6 @@
   function addNewStylesheet(domHelper, dynamicCss) {
     var cssFormating = domHelper.createDom('style');
     cssFormating.innerHTML =
-      '#dashboard-samples-container.dashboard-section a{' +
-      'text-decoration:none;' +
-      '}' +
-
       '#dashboard-samples-container {' +
       'display: block !important;' +
       'text-align: center;' +
