@@ -119,6 +119,12 @@
       '}' +
 
       '.dashboard-sample {' +
+      'display: inline-block;' +
+      'margin: 10px;' +
+      'text-decoration:none;' +
+      '}' +
+
+      '.dashboard-sample {' +
       'display: inline-block;margin: 10px;' +
       '}' +
 
