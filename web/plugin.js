@@ -2,7 +2,7 @@
 
 
   /**
-   * A dashboard tab for files containers that have two actions: 'New' and 'Open'.
+   * A dashboard tab for sample files.
    *
    * @constructor
    */
