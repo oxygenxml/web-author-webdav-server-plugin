@@ -21,7 +21,7 @@
   };
 
   /** @override */
-  sync.ui.SamplesTab.prototype.renderTabContent = function (parentDiv) {
+  sync.ui.SamplesTab.prototype.getTabContentElement = function () {
     if (!this.samplesContainer) {
       // icons sources
       var images = [sync.util.computeHdpiIcon("/plugin-resources/webdav-server/gerbera.png"),
@@ -77,7 +77,7 @@
       // add styles before adding the elements.
       addNewStylesheet(domHelper, titleCss);
     }
-    parentDiv.appendChild(this.samplesContainer);
+    return this.samplesContainer;
   };
 
   /**
