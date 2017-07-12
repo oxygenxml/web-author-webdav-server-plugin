@@ -136,15 +136,7 @@
       'display:block;' +
       'position: relative;' +
       '}' +
-      (dynamicCss ? dynamicCss : '') +
-
-      '#dashboard-container {' +
-      'box-sizing: border-box;' +
-      'border: 1px solid transparent;' +
-      'position: relative;' +
-      'min-height: 100%;' +
-      'padding-bottom: 50px;' +
-      '}';
+      (dynamicCss ? dynamicCss : '');
 
     document.head.appendChild(cssFormating);
   }
