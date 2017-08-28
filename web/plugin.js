@@ -102,6 +102,12 @@
     return urlStr;
   }
 
+  /**
+   * Add styles to the document.
+   *
+   * @param domHelper the document helper.
+   * @param dynamicCss the dynamic CSS to be added to the document.
+   */
   function addNewStylesheet(domHelper, dynamicCss) {
     var cssFormating = domHelper.createDom('style');
     cssFormating.innerHTML =
