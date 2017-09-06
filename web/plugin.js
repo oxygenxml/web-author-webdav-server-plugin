@@ -23,61 +23,82 @@
   /** @override */
   sync.ui.SamplesTab.prototype.getTabContentElement = function () {
     if (!this.samplesContainer) {
-      // icons sources
-      var images = [sync.util.computeHdpiIcon("/plugin-resources/webdav-server/gerbera.png"),
-        sync.util.computeHdpiIcon("plugin-resources/webdav-server/ditamap.png"),
-        sync.util.computeHdpiIcon("plugin-resources/webdav-server/docbook.png"),
-        sync.util.computeHdpiIcon("plugin-resources/webdav-server/xhtml.png"),
-        sync.util.computeHdpiIcon("plugin-resources/webdav-server/tei.png")];
+      var descriptor = retrieveSamplesDescriptor();
+      if (descriptor) {
+        var samples = descriptor['samples'];
+        // construct the dom structure for the samples.
+        var domHelper = new goog.dom.DomHelper();
+        this.samplesContainer = domHelper.createDom('div', {
+          id: 'dashboard-samples-container'
+        });
+        this.samplesContainer.style.display = 'none';
+        var titleCss = '';
 
-      // samples types.
-      var samples = ["DITA", "DITA Map", "DocBook", "XHTML", "TEI"];
-      // samples urls
-      var sampleUrls = ['dita/flowers/topics/flowers/gardenia.dita',
-        'dita/flowers/flowers.ditamap',
-        'docbook/v5/sample.xml',
-        'xhtml/sample.xml',
-        'tei/TEI-P5.xml'];
-      // samples ditamaps
-      var ditamaps = ['dita/flowers/flowers.ditamap', null, null, null, null];
+        for (var i in samples) {
+          var sample = samples[i];
+          var path = sample['path'];
+          var ditamap = sample['ditamap'];
+          var imagePath = sample['image'];
+          var defaultImage = false;
+          if (!imagePath) {
+            // The default image (if no one is provided in the samples descriptor)
+            imagePath = "plugin-resources/webdav-server/sample.png";
+            defaultImage = true;
+          }
+          imagePath = sync.util.computeHdpiIcon(imagePath);
 
+          var sampleLink = domHelper.createDom('a', 'dashboard-sample');
+          sampleLink.href = '#';
+          var sampleName = sample['name'];
+          var sampleId = 'sample-title-' + sampleName.replace(' ', '-');
+          sampleLink.id = sampleId;
 
-      // construct the dom structure for the samples.
-      var domHelper = new goog.dom.DomHelper();
-      this.samplesContainer = domHelper.createDom('div', {
-        id: 'dashboard-samples-container'
-      });
-      this.samplesContainer.style.display = 'none';
-      var titleCss = '';
+          titleCss += '#' + sampleId + ':after{content:"' + sampleName + '";}\n';
 
-      for (var i = 0; i < samples.length; i++) {
-        var sampleLink = domHelper.createDom('a', 'dashboard-sample');
-        sampleLink.href = '#';
-        var sampleName = samples[i];
-        var sampleId = 'sample-title-' + sampleName.replace(' ', '-');
-        sampleLink.id = sampleId;
+          var image = domHelper.createDom('img', 'dashboard-sample-image');
+          image.src = (defaultImage ? '../' : webdavServerPluginUrl) + imagePath;
+          sampleLink.appendChild(image);
+          this.samplesContainer.appendChild(sampleLink);
 
-        titleCss += '#' + sampleId + ':after{content:"' + sampleName + '";}\n';
+          var author = sync.util.getURLParameter('author') || tr(msgs.ANONYMOUS_);
 
-        var image = domHelper.createDom('img', 'dashboard-sample-image');
-        image.src = '../' + images[i];
-        sampleLink.appendChild(image);
-        this.samplesContainer.appendChild(sampleLink);
-
-        var author = sync.util.getURLParameter('author') || tr(msgs.ANONYMOUS_);
-
-        // open the sample document in a new tab when the sample image is clicked.
-        var openUrl = getUrl(sampleUrls[i], ditamaps[i], author);
-        goog.events.listen(image, goog.events.EventType.CLICK,
-          goog.bind(function (openUrl) {
-            window.open(openUrl)
-          }, this, openUrl));
+          // open the sample document in a new tab when the sample image is clicked.
+          var openUrl = getUrl(path, ditamap, author);
+          goog.events.listen(image, goog.events.EventType.CLICK,
+            goog.bind(function (openUrl) {
+              window.open(openUrl)
+            }, this, openUrl));
+        }
+        // add styles before adding the elements.
+        addNewStylesheet(domHelper, titleCss);
       }
-
-      // add styles before adding the elements.
-      addNewStylesheet(domHelper, titleCss);
     }
     return this.samplesContainer;
+  };
+
+  /**
+   * Returns a JSON containg information about all samples that must be rendered in the "Samples" tab.
+   *
+   * @param Object data JSON Object with details about samples
+   * @return {boolean}
+   */
+  function retrieveSamplesDescriptor() {
+    var descriptor = null;
+
+    $.ajax({
+      type: "GET",
+      url: webdavServerPluginUrl + '.descriptor/samples.json',
+      async: false,
+      data: "",
+      success: function (data_response) {
+        descriptor = data_response;
+      },
+      error: function () {
+
+      }
+    });
+
+    return descriptor;
   };
 
   /**
