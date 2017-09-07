@@ -50,7 +50,7 @@
           var sampleLink = domHelper.createDom('a', 'dashboard-sample');
           sampleLink.href = '#';
           var sampleName = sample['name'];
-          var sampleId = 'sample-title-' + sampleName.replace(' ', '-');
+          var sampleId = 'sample-title-' + sampleName.replace(/ /g, '-');
           sampleLink.id = sampleId;
 
           titleCss += '#' + sampleId + ':after{content:"' + sampleName + '";}\n';
@@ -142,7 +142,12 @@
       'display: inline-block;' +
       'height: 159px;' +
       'width: 125px;' +
-      'margin:50px 30px 30px 30px;' +
+      'margin:50px 30px 10px 30px;' +
+      'border: 3px solid #f2f0f0;' +
+      '}' +
+
+      '#dashboard-samples-container .dashboard-sample-image:hover {' +
+      'border-color: #b3c5e6;' +
       '}' +
 
       '.dashboard-sample {' +
@@ -158,7 +163,7 @@
       '.dashboard-sample:after {' +
       'background-color: transparent;' +
       'cursor:default;' +
-      'font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;' +
+      '    font-family: Roboto, Arial, Helvetica, sans-serif;' +
       'color: #595959;' +
       'display:block;' +
       'position: relative;' +
