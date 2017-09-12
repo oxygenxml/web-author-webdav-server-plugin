@@ -66,9 +66,12 @@
           if (labels) {
             var labelsTexts = labels.split(',');
             for (var i in labelsTexts) {
-              var labelSpan = domHelper.createDom('span', 'dashboard-sample-label');
-              labelsDiv.appendChild(labelSpan);
-              labelSpan.innerHTML = labelsTexts[i];
+              var labelText = labelsTexts[i];
+              if (labelText) {
+                var labelSpan = domHelper.createDom('span', 'dashboard-sample-label');
+                labelsDiv.appendChild(labelSpan);
+                labelSpan.innerHTML = labelText.trim();
+              }
             }
           }
           sampleLink.appendChild(labelsDiv);
@@ -164,7 +167,7 @@
 
       '.dashboard-sample {' +
       'display: inline-block;' +
-      'margin: 20px;' +
+      'margin: 10px 20px 10px 20px;' +
       'text-decoration:none;' +
       '}' +
 
