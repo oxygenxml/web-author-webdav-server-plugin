@@ -39,6 +39,7 @@
           var path = sample['path'];
           var ditamap = sample['ditamap'];
           var imagePath = sample['image'];
+          var labels = sample['labels'];
           var defaultImage = false;
           if (!imagePath) {
             // The default image (if no one is provided in the samples descriptor)
@@ -53,11 +54,26 @@
           var sampleId = 'sample-title-' + sampleName.replace(/ /g, '-');
           sampleLink.id = sampleId;
 
-          titleCss += '#' + sampleId + ':after{content:"' + sampleName + '";}\n';
-
           var image = domHelper.createDom('img', 'dashboard-sample-image');
           image.src = (defaultImage ? '../' : webdavServerPluginUrl) + imagePath;
           sampleLink.appendChild(image);
+
+          var nameDiv = domHelper.createDom('div', 'dashboard-sample-name');
+          nameDiv.innerHTML = sampleName;
+          sampleLink.appendChild(nameDiv);
+
+          var labelsDiv = domHelper.createDom('div', 'dashboard-sample-labels');
+          if (labels) {
+            var labelsTexts = labels.split(',');
+            for (var i in labelsTexts) {
+              var labelSpan = domHelper.createDom('span', 'dashboard-sample-label');
+              labelsDiv.appendChild(labelSpan);
+              labelSpan.innerHTML = labelsTexts[i];
+            }
+          }
+          sampleLink.appendChild(labelsDiv);
+
+
           this.samplesContainer.appendChild(sampleLink);
 
           var author = sync.util.getURLParameter('author') || tr(msgs.ANONYMOUS_);
@@ -142,31 +158,54 @@
       'display: inline-block;' +
       'height: 159px;' +
       'width: 125px;' +
-      'margin:50px 30px 10px 30px;' +
-      'border: 3px solid #f2f0f0;' +
-      '}' +
-
-      '#dashboard-samples-container .dashboard-sample-image:hover {' +
-      'border-color: #b3c5e6;' +
+      'margin:50px 30px 0px;' +
+      'border: 2px solid #cccccc;' +
       '}' +
 
       '.dashboard-sample {' +
       'display: inline-block;' +
-      'margin: 10px;' +
+      'margin: 20px;' +
       'text-decoration:none;' +
       '}' +
 
-      '.dashboard-sample {' +
-      'display: inline-block;margin: 10px;' +
+      '.dashboard-sample-labels {' +
+      'display: block;' +
+      'margin-bottom: 10px;' +
+      ' }' +
+
+      '.dashboard-sample-label {' +
+      'font-size: 70%;' +
+      ' border: 0px solid #ddd;' +
+      'background-color: #b4b4b4;' +
+      'border-radius: 4px;' +
+      'padding: 1px 6px;' +
+      'margin-left: 5px;' +
+      'color: #fff;' +
+      'cursor: pointer;' +
+      ' }' +
+
+
+      '#dashboard-samples-container .dashboard-sample-image:hover {' +
+      'border-color: #34789d;' +
       '}' +
 
-      '.dashboard-sample:after {' +
+      '#dashboard-samples-container .dashboard-sample:hover .dashboard-sample-image {' +
+      'border-color: #34789d;' +
+      '}' +
+
+
+    '.dashboard-sample:hover .dashboard-sample-label {' +
+      'background-color: #34789d;' +
+      ' }' +
+
+      '.dashboard-sample-name {' +
       'background-color: transparent;' +
       'cursor:default;' +
       '    font-family: Roboto, Arial, Helvetica, sans-serif;' +
       'color: #595959;' +
       'display:block;' +
       'position: relative;' +
+      'margin: 10px 0px 5px;' +
       '}' +
       (dynamicCss ? dynamicCss : '');
 
