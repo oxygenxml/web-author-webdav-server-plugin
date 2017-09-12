@@ -49,7 +49,11 @@
           imagePath = sync.util.computeHdpiIcon(imagePath);
 
           var sampleLink = domHelper.createDom('a', 'dashboard-sample');
-          sampleLink.href = '#';
+          // Open the sample document in a new tab when the sample image is clicked.
+          var author = sync.util.getURLParameter('author') || tr(msgs.ANONYMOUS_);
+          var openUrl = getUrl(path, ditamap, author);
+          sampleLink.target="_blank";
+          sampleLink.href = openUrl;
           var sampleName = sample['name'];
           var sampleId = 'sample-title-' + sampleName.replace(/ /g, '-');
           sampleLink.id = sampleId;
@@ -75,18 +79,7 @@
             }
           }
           sampleLink.appendChild(labelsDiv);
-
-
           this.samplesContainer.appendChild(sampleLink);
-
-          var author = sync.util.getURLParameter('author') || tr(msgs.ANONYMOUS_);
-
-          // open the sample document in a new tab when the sample image is clicked.
-          var openUrl = getUrl(path, ditamap, author);
-          goog.events.listen(image, goog.events.EventType.CLICK,
-            goog.bind(function (openUrl) {
-              window.open(openUrl)
-            }, this, openUrl));
         }
         // add styles before adding the elements.
         addNewStylesheet(domHelper, titleCss);
