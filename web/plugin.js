@@ -156,6 +156,12 @@
       'text-align: center;' +
       '}' +
 
+      '@media only screen and (min-width: 768px) {' +
+      '#dashboard-samples-container {' +
+      'padding: 30px 60px;' +
+      '}' +
+      '}' +
+
       '#dashboard-samples-container .dashboard-sample-image {' +
       'background-color: #FFFFFF;' +
       'display: inline-block;' +
@@ -167,7 +173,7 @@
 
       '.dashboard-sample {' +
       'display: inline-block;' +
-      'margin: 10px 20px 10px 20px;' +
+      'margin: 10px 60px 10px 60px;' +
       'text-decoration:none;' +
       '}' +
 
