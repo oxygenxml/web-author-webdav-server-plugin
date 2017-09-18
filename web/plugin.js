@@ -43,7 +43,7 @@
           var defaultImage = false;
           if (!imagePath) {
             // The default image (if no one is provided in the samples descriptor)
-            imagePath = "plugin-resources/webdav-server/sample.png";
+            imagePath = "plugin-resources/webdav-server/MissingImage.png";
             defaultImage = true;
           }
           imagePath = sync.util.computeHdpiIcon(imagePath);
