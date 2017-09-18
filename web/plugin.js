@@ -23,15 +23,15 @@
   /** @override */
   sync.ui.SamplesTab.prototype.getTabContentElement = function () {
     if (!this.samplesContainer) {
+      // construct the dom structure for the samples.
+      var domHelper = new goog.dom.DomHelper();
+      this.samplesContainer = domHelper.createDom('div', {
+        id: 'dashboard-samples-container'
+      });
+      this.samplesContainer.style.display = 'none';
       var descriptor = retrieveSamplesDescriptor();
       if (descriptor) {
         var samples = descriptor['samples'];
-        // construct the dom structure for the samples.
-        var domHelper = new goog.dom.DomHelper();
-        this.samplesContainer = domHelper.createDom('div', {
-          id: 'dashboard-samples-container'
-        });
-        this.samplesContainer.style.display = 'none';
         var titleCss = '';
 
         for (var i in samples) {
