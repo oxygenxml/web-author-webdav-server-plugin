@@ -282,7 +282,7 @@
    * Replace the save action when the the server is readonly.
    */
   if(decodeURIComponent(sync.util.getURLParameter('url'))
-      .indexOf('plugins-dispatcher/webdav-server/') != -1) {
+      .indexOf('plugins-dispatcher/webdav-server/') !== -1) {
     // Disable autosave for the WebDAV server plugin.
     sync.options.PluginsOptions.clientOptions['webdav_autosave_interval'] = '0';
 
@@ -295,22 +295,24 @@
         var editor = e.editor;
         goog.events.listen(editor, sync.api.Editor.EventTypes.ACTIONS_LOADED, function(e) {
           var saveAction = editor.getActionsManager().getActionById('Author/Save');
-          // override save action
-          saveAction.actionPerformed = function(callback) {
-            // create the dialog
-            if(!readonlySaveDialog) {
-              readonlySaveDialog = workspace.createDialog();
-              readonlySaveDialog.setTitle(tr(msgs.READ_ONLY_DOCUMENT_));
-              readonlySaveDialog.getElement().innerHTML =
-                '<div id="readonly-save-dialog">' +
+          if (saveAction) {
+            // override save action
+            saveAction.actionPerformed = function(callback) {
+              // create the dialog
+              if(!readonlySaveDialog) {
+                readonlySaveDialog = workspace.createDialog();
+                readonlySaveDialog.setTitle(tr(msgs.READ_ONLY_DOCUMENT_));
+                readonlySaveDialog.getElement().innerHTML =
+                  '<div id="readonly-save-dialog">' +
                   tr(msgs.WEBDAV_READ_ONLY_MODE_, {'$P_START': '<p>', '$P_END': '</p>', '$B_START': '<b>', '$B_END': '</b>'}) +
-                '</div>';
-              readonlySaveDialog.setButtonConfiguration(sync.api.Dialog.ButtonConfiguration.OK);
+                  '</div>';
+                readonlySaveDialog.setButtonConfiguration(sync.api.Dialog.ButtonConfiguration.OK);
+              }
+              readonlySaveDialog.onSelect(callback);
+              readonlySaveDialog.show();
             }
-            readonlySaveDialog.onSelect(callback);
-            readonlySaveDialog.show();
           }
-          
+
           // Disable the Ctrl+S shortcut.
           var noopAction = new sync.actions.NoopAction('M1 S');
           editor.getActionsManager().registerAction('DoNothing', noopAction);
