@@ -1,6 +1,5 @@
 package com.oxygenxml.sdksamples.webdav;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,39 +11,36 @@ import ro.sync.ecss.extensions.api.webapp.access.WebappPluginWorkspace;
 import ro.sync.ecss.extensions.api.webapp.plugin.PluginConfigExtension;
 import ro.sync.exml.workspace.api.PluginResourceBundle;
 import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
-
+/**
+ * Extension for Webdav server configuration
+ */
 public class ConfigWebdavServerExtension extends PluginConfigExtension {
 
   /**
    * Logger for logging.
    */
   private static final Logger logger = Logger.getLogger(ConfigWebdavServerExtension.class.getName());
-
+  /**
+   * Options namespace
+   */
   public final static String NAMESPACE = "webdav_server_plugin_";
-
+  /**
+   * Display samples option
+   */
   public final static String DISPLAY_SAMPLES = "display_samples";
+  /**
+   * Read-only mode option
+   */
   public final static String READONLY_MODE = NAMESPACE + "readonly_mode";
+  /**
+   * Enforce URL option
+   */
   public final static String ENFORCE_URL = NAMESPACE + "enforce_url";
 
   @Override
   public void init() throws ServletException {
     super.init();
     Map<String, String> defaultOptions = new HashMap<String, String>();
-
-    File samplesDir = new File(
-        getServletConfig().getServletContext().getRealPath("/"),
-        "webdav-server/samples/");
-    File gardenia = new File(
-        samplesDir.getPath() + "/dita/flowers/topics/flowers/gardenia.dita");
-
-    if (gardenia.exists()) {
-      defaultOptions.put(DISPLAY_SAMPLES, "on");
-    } else {
-      // if the samples file does not exist by default we hide the Samples
-      // section.
-      defaultOptions.put(DISPLAY_SAMPLES, "off");
-      setOption(DISPLAY_SAMPLES, "off");
-    }
 
     if (isSecurityEnabled()) {
       defaultOptions.put(READONLY_MODE, "on");
