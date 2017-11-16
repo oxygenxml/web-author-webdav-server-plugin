@@ -23,11 +23,10 @@
   /** @override */
   sync.ui.SamplesTab.prototype.getTabContentElement = function () {
     if (!this.samplesContainer) {
+      var cD = goog.dom.createDom;
       // construct the dom structure for the samples.
       var domHelper = new goog.dom.DomHelper();
-      this.samplesContainer = domHelper.createDom('div', {
-        id: 'dashboard-samples-container'
-      });
+      this.samplesContainer = cD('div', {id: 'dashboard-samples-container'});
       this.samplesContainer.style.display = 'none';
       var descriptor = retrieveSamplesDescriptor();
       if (descriptor) {
@@ -48,38 +47,41 @@
           }
           imagePath = sync.util.computeHdpiIcon(imagePath);
 
-          var sampleLink = domHelper.createDom('a', 'dashboard-sample');
           // Open the sample document in a new tab when the sample image is clicked.
           var author = sync.util.getURLParameter('author') || tr(msgs.ANONYMOUS_);
           var openUrl = getUrl(path, ditamap, author);
-          sampleLink.target="_blank";
-          sampleLink.href = openUrl;
           var sampleName = sample['name'];
           var sampleId = 'sample-title-' + sampleName.replace(/ /g, '-');
-          sampleLink.id = sampleId;
 
-          var image = domHelper.createDom('img', 'dashboard-sample-image');
-          image.src = (defaultImage ? '../' : webdavServerPluginUrl) + imagePath;
-          sampleLink.appendChild(image);
-
-          var nameDiv = domHelper.createDom('div', 'dashboard-sample-name');
-          nameDiv.innerHTML = sampleName;
-          sampleLink.appendChild(nameDiv);
-
-          var labelsDiv = domHelper.createDom('div', 'dashboard-sample-labels');
+          // Make label elements.
+          var labelElements = [];
           if (labels) {
             var labelsTexts = labels.split(',');
-            for (var i in labelsTexts) {
-              var labelText = labelsTexts[i];
+            for (var j in labelsTexts) {
+              var labelText = labelsTexts[j];
               if (labelText) {
-                var labelSpan = domHelper.createDom('span', 'dashboard-sample-label');
-                labelsDiv.appendChild(labelSpan);
-                labelSpan.innerHTML = labelText.trim();
+                labelElements.push(cD('span', 'dashboard-sample-label', labelText.trim()));
               }
             }
           }
-          sampleLink.appendChild(labelsDiv);
-          this.samplesContainer.appendChild(sampleLink);
+
+          goog.dom.appendChild(this.samplesContainer,
+            cD('a', {
+                className: 'dashboard-sample',
+                target: '_blank',
+                href: openUrl,
+                id: sampleId
+              },
+              cD('img', {
+                className: 'dashboard-sample-image',
+                src: (defaultImage ? '../' : webdavServerPluginUrl) + imagePath}
+              ),
+              cD('div', 'dashboard-sample-name', sampleName),
+              cD('div', 'dashboard-sample-labels',
+                labelElements
+              )
+            )
+          );
         }
         // add styles before adding the elements.
         addNewStylesheet(domHelper, titleCss);
@@ -258,7 +260,7 @@
   var readonlySaveDialog = null;
   var href = location.href;
   var endIndex = href.indexOf('/app/');
-  if (endIndex == -1) {
+  if (endIndex === -1) {
     endIndex = href.indexOf('/static/');
   }
 
@@ -302,6 +304,7 @@
               if(!readonlySaveDialog) {
                 readonlySaveDialog = workspace.createDialog();
                 readonlySaveDialog.setTitle(tr(msgs.READ_ONLY_DOCUMENT_));
+                // todo: add translation function for this.
                 readonlySaveDialog.getElement().innerHTML =
                   '<div id="readonly-save-dialog">' +
                   tr(msgs.WEBDAV_READ_ONLY_MODE_, {'$P_START': '<p>', '$P_END': '</p>', '$B_START': '<b>', '$B_END': '</b>'}) +
@@ -358,7 +361,7 @@
         var urlChooser = createAction.urlChooser;
         var originalRequestUrlInfo_ = goog.bind(urlChooser.requestUrlInfo_, urlChooser);
         urlChooser.requestUrlInfo_ = function(url, callback) {
-          if(url && url.indexOf('/plugins-dispatcher/webdav-server/') != -1) {
+          if(url && url.indexOf('/plugins-dispatcher/webdav-server/') !== -1) {
             callback(url, {
               rootUrl: url.substring(0, url.indexOf('/plugins-dispatcher/webdav-server/') + '/plugins-dispatcher/webdav-server/'.length),
               type: goog.string.endsWith(url, '/') ? 'COLLECTION' : 'FILE'
