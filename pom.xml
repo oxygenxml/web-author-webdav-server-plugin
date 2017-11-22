@@ -5,8 +5,10 @@
     <artifactId>oxygen-superpom</artifactId>
     <version>20.0-SNAPSHOT</version>
   </parent>
-  <artifactId>webapp-webdav-server-plugin</artifactId>
-	
+  <artifactId>web-author-webdav-server-plugin</artifactId>
+  <name>Web Author WebDAV Server Plugin</name>
+  <description>Web Author Plugin that provides a builtin WebDAV server for testing purposes.</description>
+  	
 	<properties> 
     		<oxygen.sdk.version>${project.version}</oxygen.sdk.version>
     	</properties>
