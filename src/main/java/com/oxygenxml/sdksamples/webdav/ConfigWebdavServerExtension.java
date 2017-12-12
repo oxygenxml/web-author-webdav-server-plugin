@@ -44,8 +44,9 @@ public class ConfigWebdavServerExtension extends PluginConfigExtension {
 
     if (isSecurityEnabled()) {
       defaultOptions.put(READONLY_MODE, "on");
-      setOption(READONLY_MODE, "on");
-      logger.warn("Webdav Server running in read-only mode because security is enabled.");
+      if("on".equals(getOption(READONLY_MODE, "on"))) {
+        logger.warn("Webdav Server running in read-only mode because security is enabled.");
+      }
     } else {
       defaultOptions.put(READONLY_MODE, "off");
     }
@@ -57,7 +58,7 @@ public class ConfigWebdavServerExtension extends PluginConfigExtension {
   /**
    * @return <code>true</code> if security is enabled.
    */
-  private boolean isSecurityEnabled() {
+  public static boolean isSecurityEnabled() {
     return System.getSecurityManager() != null;
   }
   
@@ -77,12 +78,10 @@ public class ConfigWebdavServerExtension extends PluginConfigExtension {
         + "<input name='" + DISPLAY_SAMPLES + "' type='checkbox' value='on'"
         + (shouldDisplaySamples ? " checked" : "") + "> " + rb.getMessage(TranslationTags.DISPLAY_SAMPLES)
         + "</label>";
-    if (!isSecurityEnabled()) {
-      // READONLY
-      form += "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
-          + "<input name='" + READONLY_MODE + "' type='checkbox' value='on'"
-          + (readonly ? " checked" : "") + "> " + rb.getMessage(TranslationTags.READONLY_MODE) + "</label>";
-    }
+    // READONLY
+    form += "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
+        + "<input name='" + READONLY_MODE + "' type='checkbox' value='on'"
+        + (readonly ? " checked" : "") + "> " + rb.getMessage(TranslationTags.READONLY_MODE) + "</label>";
     // Enforce url
     form += "<label style='margin-bottom:6px;display:block;overflow:hidden'>"
         + "<input name='" + ENFORCE_URL + "' type='checkbox' value='on'"
