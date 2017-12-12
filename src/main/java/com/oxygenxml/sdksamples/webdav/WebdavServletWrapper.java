@@ -7,12 +7,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +23,7 @@ import org.apache.catalina.servlets.WebdavServlet;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 
+import ro.sync.ecss.extensions.api.webapp.access.WebappPluginWorkspace;
 import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 import ro.sync.exml.workspace.api.options.WSOptionsStorage;
 
@@ -44,7 +47,7 @@ public class WebdavServletWrapper extends WebdavServlet {
   private String path;
   
   WSOptionsStorage optionsStorage;
-  
+
   /**
    * Constructor.
    * 
@@ -55,13 +58,28 @@ public class WebdavServletWrapper extends WebdavServlet {
     
     optionsStorage = PluginWorkspaceProvider.getPluginWorkspace().getOptionsStorage();
     
-    String option = optionsStorage.getOption(ConfigWebdavServerExtension.READONLY_MODE, "xxx");
+    String option = optionsStorage.getOption(ConfigWebdavServerExtension.READONLY_MODE, "off");
     this.readOnly = "on".equals(option);
     optionsStorage.addOptionListener(new ReadonlyOptionListener(this));
   }
   
   @Override
   public void init(ServletConfig config) throws ServletException {
+    this.webdavDir = new File(config.getServletContext().getRealPath("/"), this.path);
+    ServletContext context = config.getServletContext();
+    
+    // Isolate Tomcat 8.x implementation trough reflection so that it still works with Tomcat 7.0.
+    if(isTomcat8()) {
+      this.webdavDir = new File((File)context.getAttribute(WebappPluginWorkspace.OXYGEN_WEBAPP_DATA_DIR), "webdav-server");
+      try {
+        Class<?> repoManager = Class.forName("com.oxygenxml.sdksamples.webdav.repo.WebdavRepoManager");
+        Method chageLocationMethod = repoManager.getMethod("changeRepoLocation", File.class, ServletContext.class);
+        chageLocationMethod.invoke(null, webdavDir, context);
+      } catch (ReflectiveOperationException e) {
+        // The WebAuthor is running in Tomcat 7.
+      }
+    }
+    
     super.init(config);
     this.loadMappings();
   }
@@ -126,7 +144,6 @@ public class WebdavServletWrapper extends WebdavServlet {
    */
   private String adjustRelativePath(String relativePath) {
     logger.debug("original relative path: " + relativePath);
-    
     // if the request is on root, list samples
     String rootPath = "/" + WebappWebdavServlet.WEBDAV_SERVER + "/";
     if(relativePath.equals(rootPath)) {
@@ -160,7 +177,6 @@ public class WebdavServletWrapper extends WebdavServlet {
       }
       relativePath = rootPath + value + pathEnd;
     }
-    
     logger.debug("returned relative path: " + relativePath);
     return relativePath;
   }
@@ -184,14 +200,24 @@ public class WebdavServletWrapper extends WebdavServlet {
     }
     super.service(req, resp);
   }
-
+  
+  @Override
+  protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    String path = getRelativePath(req);
+    try {
+      Class<?> repoManager = Class.forName("com.oxygenxml.sdksamples.webdav.repo.WebdavRepoManager");
+      Method handlePutMethod = repoManager.getMethod("handlePut", HttpServletRequest.class, String.class);
+      handlePutMethod.invoke(null, req, path);
+    } catch (ReflectiveOperationException e ) {
+      // The WebAuthor is running in Tomcat 7.
+      super.doPut(req, resp);
+    }
+  }
   
   /**
    * Load the user defined folder mappings from the mapping.properties file.
    */
   private void loadMappings() {
-    webdavDir = new File(getServletConfig().getServletContext().getRealPath("/"),
-        this.path);
     File propertiesFile = new File(webdavDir, "mapping.properties");
     if (!webdavDir.exists() && !this.readOnly) {
       webdavDir.mkdir();
@@ -246,5 +272,18 @@ public class WebdavServletWrapper extends WebdavServlet {
   public void setReadonly(boolean readonly) {
     logger.debug("set readonly :" + readonly);
     this.readOnly = readonly;
+  }
+  
+  /**
+   * @return whether the code  is ran in a Tomcat8 environment.
+   */
+  private static boolean isTomcat8() {
+    boolean isTomcat8 = true;
+      try {
+        Class.forName("org.apache.catalina.WebResourceRoot");
+      } catch (ClassNotFoundException e) {
+        isTomcat8 = false;
+      }
+    return isTomcat8;
   }
 }
