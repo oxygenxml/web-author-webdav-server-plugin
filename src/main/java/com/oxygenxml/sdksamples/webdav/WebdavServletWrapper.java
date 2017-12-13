@@ -207,7 +207,7 @@ public class WebdavServletWrapper extends WebdavServlet {
     try {
       Class<?> repoManager = Class.forName("com.oxygenxml.sdksamples.webdav.repo.WebdavRepoManager");
       // First we check the resource's lock status.
-      Method isLockedMetod = this.getClass().getDeclaredMethod("isLocked", HttpServletRequest.class);
+      Method isLockedMetod = WebdavServlet.class.getDeclaredMethod("isLocked", HttpServletRequest.class);
       isLockedMetod.setAccessible(true);
       isLockedMetod.invoke(this, req);
       
