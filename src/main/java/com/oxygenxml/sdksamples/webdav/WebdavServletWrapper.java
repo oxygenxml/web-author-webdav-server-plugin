@@ -206,6 +206,11 @@ public class WebdavServletWrapper extends WebdavServlet {
     String path = getRelativePath(req);
     try {
       Class<?> repoManager = Class.forName("com.oxygenxml.sdksamples.webdav.repo.WebdavRepoManager");
+      // First we check the resource's lock status.
+      Method isLockedMetod = this.getClass().getDeclaredMethod("isLocked", HttpServletRequest.class);
+      isLockedMetod.setAccessible(true);
+      isLockedMetod.invoke(this, req);
+      
       Method handlePutMethod = repoManager.getMethod("handlePut", HttpServletRequest.class, String.class);
       handlePutMethod.invoke(null, req, path);
     } catch (ReflectiveOperationException e ) {

@@ -14,7 +14,8 @@ import org.apache.catalina.WebResourceRoot;
 import org.apache.catalina.WebResourceRoot.ResourceSetType;
 import org.apache.catalina.WebResourceSet;
 
-import ro.sync.util.URLUtil;
+import ro.sync.basic.util.URLUtil;
+
 
 /**
  * Class that handles the move of the repo folder to the work dir.
