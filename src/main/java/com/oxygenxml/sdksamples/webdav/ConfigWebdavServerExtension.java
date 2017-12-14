@@ -42,14 +42,7 @@ public class ConfigWebdavServerExtension extends PluginConfigExtension {
     super.init();
     Map<String, String> defaultOptions = new HashMap<String, String>();
 
-    if (isSecurityEnabled()) {
-      defaultOptions.put(READONLY_MODE, "on");
-      if("on".equals(getOption(READONLY_MODE, "on"))) {
-        logger.warn("Webdav Server running in read-only mode because security is enabled.");
-      }
-    } else {
-      defaultOptions.put(READONLY_MODE, "off");
-    }
+    defaultOptions.put(READONLY_MODE, "off");
     defaultOptions.put(ENFORCE_URL, "off");
 
     this.setDefaultOptions(defaultOptions);
