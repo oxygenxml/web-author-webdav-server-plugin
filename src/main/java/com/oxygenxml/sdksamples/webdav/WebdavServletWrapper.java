@@ -76,12 +76,28 @@ public class WebdavServletWrapper extends WebdavServlet {
         Method chageLocationMethod = repoManager.getMethod("changeRepoLocation", File.class, ServletContext.class);
         chageLocationMethod.invoke(null, webdavDir, context);
       } catch (ReflectiveOperationException e) {
-        // The WebAuthor is running in Tomcat 7.
+        // The WebAuthor is running in Tomcat 7
+        // so we leave the default implementation.
       }
     }
     
     super.init(config);
     this.loadMappings();
+  }
+  
+  @Override
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    // Force the download for get requests.
+    String path = getRelativePath(request);
+    if(isFile(path)) {
+      String fileName = getFileName(path);
+      // Set download headers.
+      response.setContentType("application/octet-stream");
+      response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+      response.setHeader("Content-Description", "File-Transfer");
+    }
+    
+    super.doGet(request, response);
   }
 
   @Override
@@ -206,17 +222,38 @@ public class WebdavServletWrapper extends WebdavServlet {
     String path = getRelativePath(req);
     try {
       Class<?> repoManager = Class.forName("com.oxygenxml.sdksamples.webdav.repo.WebdavRepoManager");
-      // First we check the resource's lock status.
-      Method isLockedMetod = WebdavServlet.class.getDeclaredMethod("isLocked", HttpServletRequest.class);
-      isLockedMetod.setAccessible(true);
-      isLockedMetod.invoke(this, req);
-      
+      if(isResourceLocked(req)) {
+        resp.sendError(HttpStatus.SC_LOCKED);
+        return;
+      }
       Method handlePutMethod = repoManager.getMethod("handlePut", HttpServletRequest.class, String.class);
       handlePutMethod.invoke(null, req, path);
     } catch (ReflectiveOperationException e ) {
       // The WebAuthor is running in Tomcat 7.
       super.doPut(req, resp);
     }
+  }
+  
+  /**
+   * Checks if the resources was locked by another user or not.
+   * 
+   * @param req the resource servlet request.
+   * 
+   * @return whether the resource was locked by someone else or not.
+   */
+  private boolean isResourceLocked(HttpServletRequest req) {
+    // The isLocked method from the super class is private
+    // so we invoke it through reflection.
+    boolean isLocked = false;
+    try {
+      Method isLockedMetod;
+      isLockedMetod = WebdavServlet.class.getDeclaredMethod("isLocked", HttpServletRequest.class);
+      isLockedMetod.setAccessible(true);
+      isLocked = (Boolean)isLockedMetod.invoke(this, req);
+    } catch (ReflectiveOperationException e ) {
+      e.printStackTrace();
+    }
+    return isLocked;
   }
   
   /**
@@ -290,5 +327,38 @@ public class WebdavServletWrapper extends WebdavServlet {
         isTomcat8 = false;
       }
     return isTomcat8;
+  }
+  
+  /**
+   * @param path the file path.
+   * 
+   * @return the file name.
+   */
+  private String getFileName(String path) {
+    String fileName = "";
+    try {
+      Class<?> repoManager = Class.forName("com.oxygenxml.sdksamples.webdav.repo.WebdavRepoManager");
+      Method getFileNameMethod = repoManager.getMethod("getFileName", String.class);
+      fileName = (String)getFileNameMethod.invoke(null, path);
+    } catch (ReflectiveOperationException e) {}
+    return fileName;
+  }
+  
+  /**
+   * Whether the requested resources is a file.
+   * 
+   * @param path the resource path.
+   * 
+   * @return whether the resources is a file.
+   */
+  private boolean isFile(String path) {
+    boolean isFile = false;
+    try {
+      Class<?> repoManager = Class.forName("com.oxygenxml.sdksamples.webdav.repo.WebdavRepoManager");
+      Method isFileMethod = repoManager.getMethod("isFile", String.class);
+      isFile = (Boolean)isFileMethod.invoke(null, path);
+    } catch (ReflectiveOperationException e) {}
+    
+    return isFile;
   }
 }

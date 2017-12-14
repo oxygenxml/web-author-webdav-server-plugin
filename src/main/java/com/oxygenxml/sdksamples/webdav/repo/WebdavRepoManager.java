@@ -10,6 +10,7 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.catalina.Globals;
+import org.apache.catalina.WebResource;
 import org.apache.catalina.WebResourceRoot;
 import org.apache.catalina.WebResourceRoot.ResourceSetType;
 import org.apache.catalina.WebResourceSet;
@@ -55,14 +56,53 @@ public class WebdavRepoManager {
    */
   public static boolean handlePut(HttpServletRequest req, String path) throws IOException {
     boolean wroteResource = false;
+    WebResourceSet resourceSet = getResourceSet(path);
     ServletInputStream is = req.getInputStream();
+    wroteResource = resourceSet.write(path, is, true);
+    return wroteResource;
+  }
+  
+  /**
+   * Finds the resource set that contains the current path.
+   * 
+   * @param path the resources path.
+   * 
+   * @return the resource set containing the resource.
+   */
+  private static WebResourceSet getResourceSet(String path) {
+    WebResourceSet resourceSet = null;
     WebResourceSet[] preResources = resources.getPreResources();
     for (int i = 0; i < preResources.length; i++) {
-      WebResourceSet resourceSet = preResources[i];
-      if(resourceSet.getResource(path) != null) {
-        wroteResource = resourceSet.write(path, is, true);
+      if(preResources[i].getResource(path) != null) {
+        resourceSet = preResources[i];
       }
     }
-    return wroteResource;
+    return resourceSet;
+  }
+  
+  /**
+   * Retrieves the file name of the resource.
+   * 
+   * @param path the resource path
+   * 
+   * @return the file name.
+   */
+  public static String getFileName(String path) {
+    WebResourceSet resourceSet = getResourceSet(path);
+    WebResource resource = resourceSet.getResource(path);
+    
+    return resource.getName();
+  }
+  
+  /**
+   * @param path the resource path
+   * 
+   * @return whether the resources is a file or not.
+   */
+  public static boolean isFile(String path) {
+    WebResourceSet resourceSet = getResourceSet(path);
+    WebResource resource = resourceSet.getResource(path);
+    
+    return resource.isFile();
   }
 }
