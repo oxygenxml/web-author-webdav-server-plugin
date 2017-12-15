@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.catalina.servlets.WebdavServlet;
-import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 
 import ro.sync.ecss.extensions.api.webapp.access.WebappPluginWorkspace;
@@ -40,6 +39,11 @@ public class WebdavServletWrapper extends WebdavServlet {
 
   private static final long serialVersionUID = 1L;
   private static final String METHOD_PROPFIND = "PROPFIND";
+
+  /**
+   * The HTTP status code for "locked".
+   */
+  private static final int SC_LOCKED = 423;
   
   private Map<String, String> pathsMapping;
   
@@ -205,12 +209,12 @@ public class WebdavServletWrapper extends WebdavServlet {
     if(req.getMethod().equals(METHOD_PROPFIND)) {
       if (this.getRelativePath(req).equals("/" + this.path + "/")) {
         // We do not support listing root folder.
-        resp.setStatus(HttpStatus.SC_METHOD_NOT_ALLOWED);
+        resp.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
         return;
       }
       if (!req.getRequestURL().toString().endsWith("/") && readOnly) {
         // In read-only mode, we prevent locking.
-        resp.setStatus(HttpStatus.SC_METHOD_NOT_ALLOWED);
+        resp.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
         return;
       }
     }
@@ -223,7 +227,7 @@ public class WebdavServletWrapper extends WebdavServlet {
     try {
       Class<?> repoManager = Class.forName("com.oxygenxml.sdksamples.webdav.repo.WebdavRepoManager");
       if(isResourceLocked(req)) {
-        resp.sendError(HttpStatus.SC_LOCKED);
+        resp.sendError(SC_LOCKED);
         return;
       }
       Method handlePutMethod = repoManager.getMethod("handlePut", HttpServletRequest.class, String.class);
