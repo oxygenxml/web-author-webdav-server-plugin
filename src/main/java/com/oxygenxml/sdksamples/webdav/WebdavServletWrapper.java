@@ -300,13 +300,18 @@ public class WebdavServletWrapper extends WebdavServlet {
     }
     // if there is no ROOT mapping we map to the samples folder
     // if there is no samples folder we create it.
+    File samplesFolder = new File(webdavDir, "samples");
     if(pathsMapping.get("/") == null) {
-      File samplesFolder = new File(webdavDir, "samples");
       if (!samplesFolder.exists() && !this.readOnly) {
         samplesFolder.mkdir();
       }
       pathsMapping.put("/", "samples");
     }
+    String[] sampleEntries = samplesFolder.list();
+    if (sampleEntries == null || sampleEntries.length == 0) {
+      logger.warn("Could not find any sample files in folder: " + samplesFolder.getAbsolutePath());
+    }
+    
     logger.debug("WebDAV mappings: " + pathsMapping);
   }
   
