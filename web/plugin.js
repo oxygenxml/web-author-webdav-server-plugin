@@ -285,15 +285,17 @@
    */
   if(decodeURIComponent(sync.util.getURLParameter('url'))
       .indexOf('plugins-dispatcher/webdav-server/') !== -1) {
-    // Disable autosave for the WebDAV server plugin.
-    sync.options.PluginsOptions.clientOptions['webdav_autosave_interval'] = '0';
 
-    goog.events.listen(workspace, sync.api.Workspace.EventType.EDITOR_LOADED, function(e) {
-      // load the css rules used in the editor.
-      loadEditorCSS();
+    var readonlyMode = sync.options.PluginsOptions.getClientOption('webdav_server_plugin_readonly_mode') ||
+      sync.util.getURLParameter('webdav_disable_save') === 'true';
+    if(readonlyMode == 'on') {
+      // Disable autosave for the WebDAV server plugin.
+      sync.options.PluginsOptions.clientOptions['webdav_autosave_interval'] = '0';
 
-      var readonlyMode = sync.options.PluginsOptions.getClientOption('webdav_server_plugin_readonly_mode');
-      if(readonlyMode == 'on') {
+      goog.events.listen(workspace, sync.api.Workspace.EventType.EDITOR_LOADED, function(e) {
+        // load the css rules used in the editor.
+        loadEditorCSS();
+
         var editor = e.editor;
         goog.events.listen(editor, sync.api.Editor.EventTypes.ACTIONS_LOADED, function(e) {
           var saveAction = editor.getActionsManager().getActionById('Author/Save');
@@ -319,7 +321,7 @@
           // Disable the Ctrl+S shortcut.
           var noopAction = new sync.actions.NoopAction('M1 S');
           editor.getActionsManager().registerAction('DoNothing', noopAction);
-  
+
           var toolbarActions = e.actionsConfiguration.toolbars[0].children;
           var i = 0;
           for(i = 0; i < toolbarActions.length; i++) {
@@ -333,8 +335,8 @@
           editor.getActionsManager().registerAction('Author/SaveLocal',
             new sync.actions.DownloadXMLAction(editor, ''));
         });
-      }
-    });
+      });
+    }
   }
 
   function loadEditorCSS() {
