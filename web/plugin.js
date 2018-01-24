@@ -286,9 +286,9 @@
   if(decodeURIComponent(sync.util.getURLParameter('url'))
       .indexOf('plugins-dispatcher/webdav-server/') !== -1) {
 
-    var readonlyMode = sync.options.PluginsOptions.getClientOption('webdav_server_plugin_readonly_mode') ||
+    var readonlyMode = sync.options.PluginsOptions.getClientOption('webdav_server_plugin_readonly_mode') === 'on' ||
       sync.util.getURLParameter('webdav_disable_save') === 'true';
-    if(readonlyMode == 'on') {
+    if(readonlyMode) {
       // Disable autosave for the WebDAV server plugin.
       sync.options.PluginsOptions.clientOptions['webdav_autosave_interval'] = '0';
 
