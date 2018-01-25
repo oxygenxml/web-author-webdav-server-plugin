@@ -64,6 +64,10 @@ public class WebdavServletWrapper extends WebdavServlet {
     
     String option = optionsStorage.getOption(ConfigWebdavServerExtension.READONLY_MODE, "off");
     this.readOnly = "on".equals(option);
+    
+    System.out.println(" WebDAV ServerConstructor READONLY " + readOnly);
+    
+    
     optionsStorage.addOptionListener(new ReadonlyOptionListener(this));
   }
   
@@ -87,6 +91,7 @@ public class WebdavServletWrapper extends WebdavServlet {
     
     super.init(config);
     this.loadMappings();
+    System.out.println(" WebDAV Serverinit readonly " + this.readOnly);
   }
   
   @Override
@@ -204,6 +209,8 @@ public class WebdavServletWrapper extends WebdavServlet {
   @Override
   protected void service(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
+    
+    System.out.println(" WebDAV ServerServide readonly " + this.readOnly);
 
     // do not allow to list the workspace dir, only it's children should be listed.
     if(req.getMethod().equals(METHOD_PROPFIND)) {
