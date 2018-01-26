@@ -64,10 +64,6 @@ public class WebdavServletWrapper extends WebdavServlet {
     
     String option = optionsStorage.getOption(ConfigWebdavServerExtension.READONLY_MODE, "off");
     this.readOnly = "on".equals(option);
-    
-    System.out.println(" WebDAV ServerConstructor READONLY " + readOnly);
-    
-    
     optionsStorage.addOptionListener(new ReadonlyOptionListener(this));
   }
   
@@ -91,7 +87,6 @@ public class WebdavServletWrapper extends WebdavServlet {
     
     super.init(config);
     this.loadMappings();
-    System.out.println(" WebDAV Serverinit readonly " + this.readOnly);
   }
   
   @Override
@@ -209,8 +204,6 @@ public class WebdavServletWrapper extends WebdavServlet {
   @Override
   protected void service(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
-    
-    System.out.println(" WebDAV Server service readonly " + req.getMethod() + " "+ this.readOnly);
 
     // do not allow to list the workspace dir, only it's children should be listed.
     if(req.getMethod().equals(METHOD_PROPFIND)) {
@@ -230,18 +223,21 @@ public class WebdavServletWrapper extends WebdavServlet {
   
   @Override
   protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    String path = getRelativePath(req);
-    try {
-      Class<?> repoManager = Class.forName("com.oxygenxml.sdksamples.webdav.repo.WebdavRepoManager");
-      if(isResourceLocked(req)) {
-        resp.sendError(SC_LOCKED);
-        return;
+    if(isResourceLocked(req)) {
+      resp.sendError(SC_LOCKED);
+      return;
+    } else if(this.readOnly) {
+      resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+    } else {
+      String path = getRelativePath(req);
+      try {
+        Class<?> repoManager = Class.forName("com.oxygenxml.sdksamples.webdav.repo.WebdavRepoManager");
+        Method handlePutMethod = repoManager.getMethod("handlePut", HttpServletRequest.class, String.class);
+        handlePutMethod.invoke(null, req, path);
+      } catch (ReflectiveOperationException e ) {
+        // The WebAuthor is running in Tomcat 7.
+        super.doPut(req, resp);
       }
-      Method handlePutMethod = repoManager.getMethod("handlePut", HttpServletRequest.class, String.class);
-      handlePutMethod.invoke(null, req, path);
-    } catch (ReflectiveOperationException e ) {
-      // The WebAuthor is running in Tomcat 7.
-      super.doPut(req, resp);
     }
   }
   
