@@ -210,7 +210,7 @@ public class WebdavServletWrapper extends WebdavServlet {
   protected void service(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
     
-    System.out.println(" WebDAV ServerServide readonly " + this.readOnly);
+    System.out.println(" WebDAV Server service readonly " + req.getMethod() + " "+ this.readOnly);
 
     // do not allow to list the workspace dir, only it's children should be listed.
     if(req.getMethod().equals(METHOD_PROPFIND)) {
