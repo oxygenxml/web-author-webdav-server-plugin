@@ -292,51 +292,61 @@
       // Disable autosave for the WebDAV server plugin.
       sync.options.PluginsOptions.clientOptions['webdav_autosave_interval'] = '0';
 
-      goog.events.listen(workspace, sync.api.Workspace.EventType.EDITOR_LOADED, function(e) {
-        // load the css rules used in the editor.
-        loadEditorCSS();
-
-        var editor = e.editor;
-        goog.events.listen(editor, sync.api.Editor.EventTypes.ACTIONS_LOADED, function(e) {
-          var saveAction = editor.getActionsManager().getActionById('Author/Save');
-          if (saveAction) {
-            // override save action
-            saveAction.actionPerformed = function(callback) {
-              // create the dialog
-              if(!readonlySaveDialog) {
-                readonlySaveDialog = workspace.createDialog();
-                readonlySaveDialog.setTitle(tr(msgs.READ_ONLY_DOCUMENT_));
-                // todo: add translation function for this.
-                readonlySaveDialog.getElement().innerHTML =
-                  '<div id="readonly-save-dialog">' +
-                  tr(msgs.WEBDAV_READ_ONLY_MODE_, {'$P_START': '<p>', '$P_END': '</p>', '$B_START': '<b>', '$B_END': '</b>'}) +
-                  '</div>';
-                readonlySaveDialog.setButtonConfiguration(sync.api.Dialog.ButtonConfiguration.OK);
-              }
-              readonlySaveDialog.onSelect(callback);
-              readonlySaveDialog.show();
-            }
-          }
-
-          // Disable the Ctrl+S shortcut.
-          var noopAction = new sync.actions.NoopAction('M1 S');
-          editor.getActionsManager().registerAction('DoNothing', noopAction);
-
-          var toolbarActions = e.actionsConfiguration.toolbars[0].children;
-          var i = 0;
-          for(i = 0; i < toolbarActions.length; i++) {
-            var currentAction = toolbarActions[i];
-            if(currentAction.id == 'Author/Save') {
-              // Replace the Save action withe download.
-              var downloadActionDescriptor = {id: 'Author/SaveLocal', type: 'action'};
-              toolbarActions.splice(i, 1, downloadActionDescriptor);
-            }
-          }
-          editor.getActionsManager().registerAction('Author/SaveLocal',
-            new sync.actions.DownloadXMLAction(editor, ''));
-        });
-      });
+      goog.events.listen(workspace, sync.api.Workspace.EventType.EDITOR_LOADED, readOnlyEditorLoaded);
     }
+  }
+
+  /**
+   * Editor Loaded callback.
+   *
+   * @param e the editor loaded event.
+   */
+  function readOnlyEditorLoaded(e) {
+    // load the css rules used in the editor.
+    loadEditorCSS();
+
+    var editor = e.editor;
+    goog.events.listen(editor, sync.api.Editor.EventTypes.ACTIONS_LOADED, function(e) {
+      var saveAction = editor.getActionsManager().getActionById('Author/Save');
+      if (saveAction) {
+        // override save action
+        saveAction.actionPerformed = function(callback) {
+          // create the dialog
+          if(!readonlySaveDialog) {
+            readonlySaveDialog = workspace.createDialog();
+            readonlySaveDialog.setTitle(tr(msgs.READ_ONLY_DOCUMENT_));
+            // todo: add translation function for this.
+            readonlySaveDialog.getElement().innerHTML =
+              '<div id="readonly-save-dialog">' +
+              tr(msgs.WEBDAV_READ_ONLY_MODE_, {'$P_START': '<p>', '$P_END': '</p>', '$B_START': '<b>', '$B_END': '</b>'}) +
+              '</div>';
+            readonlySaveDialog.setButtonConfiguration(sync.api.Dialog.ButtonConfiguration.OK);
+          }
+          readonlySaveDialog.onSelect(callback);
+          readonlySaveDialog.show();
+        }
+      }
+
+      // Disable the Ctrl+S shortcut.
+      var noopAction = new sync.actions.NoopAction('M1 S');
+      editor.getActionsManager().registerAction('DoNothing', noopAction);
+
+      if(e.actionsConfiguration.toolbars.length) {
+        var toolbarActions = e.actionsConfiguration.toolbars[0].children;
+        var i = 0;
+        for (i = 0; i < toolbarActions.length; i ++) {
+          var currentAction = toolbarActions[i];
+          if (currentAction.id == 'Author/Save') {
+            // Replace the Save action withe download.
+            var downloadActionDescriptor = {id: 'Author/SaveLocal', type: 'action'};
+            toolbarActions.splice(i, 1, downloadActionDescriptor);
+          }
+        }
+      }
+
+      editor.getActionsManager().registerAction('Author/SaveLocal',
+        new sync.actions.DownloadXMLAction(editor, ''));
+    });
   }
 
   function loadEditorCSS() {
