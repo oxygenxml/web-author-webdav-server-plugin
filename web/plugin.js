@@ -93,8 +93,7 @@
   /**
    * Returns a JSON containg information about all samples that must be rendered in the "Samples" tab.
    *
-   * @param Object data JSON Object with details about samples
-   * @return {boolean}
+   * @return Object data JSON Object with details about samples
    */
   function retrieveSamplesDescriptor() {
     var descriptor = null;
@@ -113,7 +112,7 @@
     });
 
     return descriptor;
-  };
+  }
 
   /**
    * Compute the document url depending on params.
@@ -269,13 +268,13 @@
   window.webdavServerPluginUrl = baseUrl;
 
   // enforce the url if option enabled.
-  if('on' == sync.options.PluginsOptions.getClientOption('webdav_server_plugin_enforce_url')) {
+  if('on' === sync.options.PluginsOptions.getClientOption('webdav_server_plugin_enforce_url')) {
     window.addEnforcedWebdavUrl && window.addEnforcedWebdavUrl(baseUrl);
   }
   // load samples thumbails.
   goog.events.listen(
     workspace, sync.api.Workspace.EventType.BEFORE_DASHBOARD_LOADED, function() {
-      if (sync.options.PluginsOptions.getClientOption('display_samples') == "on") {
+      if (sync.options.PluginsOptions.getClientOption('display_samples') === "on") {
         workspace.addDashboardAdditionalTabs(new sync.ui.SamplesTab());
       }
     });
@@ -315,11 +314,22 @@
           if(!readonlySaveDialog) {
             readonlySaveDialog = workspace.createDialog();
             readonlySaveDialog.setTitle(tr(msgs.READ_ONLY_DOCUMENT_));
-            // todo: add translation function for this.
-            readonlySaveDialog.getElement().innerHTML =
-              '<div id="readonly-save-dialog">' +
-              tr(msgs.WEBDAV_READ_ONLY_MODE_, {'$P_START': '<p>', '$P_END': '</p>', '$B_START': '<b>', '$B_END': '</b>'}) +
-              '</div>';
+            readonlySaveDialog.getElement().innerHTML = '';
+            var googCreateDom = goog.dom.createDom;
+            goog.dom.append(readonlySaveDialog.getElement(),
+              googCreateDom('div', {id: 'readonly-save-dialog'},
+                trDom(msgs.WEBDAV_READ_ONLY_MODE_, {
+                  '$P_START': {
+                    end: '$P_END',
+                    node: googCreateDom('p')
+                  },
+                  '$B_START': {
+                    end: '$B_END',
+                    node: googCreateDom('b')
+                  }
+                })
+              )
+            );
             readonlySaveDialog.setButtonConfiguration(sync.api.Dialog.ButtonConfiguration.OK);
           }
           readonlySaveDialog.onSelect(callback);
@@ -333,10 +343,9 @@
 
       if(e.actionsConfiguration.toolbars.length) {
         var toolbarActions = e.actionsConfiguration.toolbars[0].children;
-        var i = 0;
-        for (i = 0; i < toolbarActions.length; i ++) {
+        for (var i = 0; i < toolbarActions.length; i ++) {
           var currentAction = toolbarActions[i];
-          if (currentAction.id == 'Author/Save') {
+          if (currentAction.id === 'Author/Save') {
             // Replace the Save action withe download.
             var downloadActionDescriptor = {id: 'Author/SaveLocal', type: 'action'};
             toolbarActions.splice(i, 1, downloadActionDescriptor);
@@ -369,7 +378,7 @@
     var createActions = workspace.getActionsManager().getCreateActions();
     for(var i = 0; i < createActions.length; i++) {
       var createAction = createActions[i];
-      if(createAction.getActionId() == 'webdav-create-action') {
+      if(createAction.getActionId() === 'webdav-create-action') {
         var urlChooser = createAction.urlChooser;
         var originalRequestUrlInfo_ = goog.bind(urlChooser.requestUrlInfo_, urlChooser);
         urlChooser.requestUrlInfo_ = function(url, callback) {
