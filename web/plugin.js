@@ -39,6 +39,8 @@
           var ditamap = sample['ditamap'];
           var imagePath = sample['image'];
           var labels = sample['labels'];
+          var urlParams = sample['urlParams'];
+          
           var defaultImage = false;
           if (!imagePath) {
             // The default image (if no one is provided in the samples descriptor)
@@ -49,7 +51,7 @@
 
           // Open the sample document in a new tab when the sample image is clicked.
           var author = sync.util.getURLParameter('author') || tr(msgs.ANONYMOUS_);
-          var openUrl = getUrl(path, ditamap, author);
+          var openUrl = getUrl(path, ditamap, author, urlParams);
           var sampleName = sample['name'];
           var sampleId = 'sample-title-' + sampleName.replace(/ /g, '-');
 
@@ -120,10 +122,11 @@
    * @param docUrl the document url.
    * @param ditamapUrl the ditamap url.
    * @param authorName the author name.
+   * @param urlParams url parameters.
    *
    * @return {string} the document url.
    */
-  function getUrl(docUrl, ditamapUrl, authorName) {
+  function getUrl(docUrl, ditamapUrl, authorName, urlParams) {
     var urlStr = "oxygen.html?";
 
     urlStr += 'url=webdav-' + encodeURIComponent((webdavServerPluginUrl + docUrl).replace('\\', '/'));
@@ -132,6 +135,14 @@
     if (ditamapUrl) {
       urlStr += '&ditamap=webdav-' + encodeURIComponent((webdavServerPluginUrl + ditamapUrl).replace('\\', '/')) + '&';
     }
+
+    if (urlParams) {
+      for (var paramName in urlParams) {
+        var paramValue = urlParams[paramName];
+        urlStr += '&' + paramName + '=' + paramValue;
+      }
+    }
+
     urlStr += '&author=' + authorName;
     return urlStr;
   }
