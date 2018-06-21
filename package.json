@@ -1,0 +1,25 @@
+{
+  "name": "8webdav-server",
+  "version": "1.0.0",
+  "description": "WebDAV Server Plugin for oXygen XML WebApp ===============================================",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oxygenxml/web-author-webdav-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oxygenxml/web-author-webdav-server/issues"
+  },
+  "homepage": "https://github.com/oxygenxml/web-author-webdav-server#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-uglify": "^1.5.3",
+    "sync-i18n": "0.0.X"
+  }
+}

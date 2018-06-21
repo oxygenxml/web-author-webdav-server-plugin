@@ -1,14 +1,14 @@
 <component>
 	<fileSets>
 		<fileSet>
-			<directory>web</directory>
+			<directory>target/web</directory>
 			<outputDirectory>/web</outputDirectory>
 			<includes>
 				<include>**/*</include>
 			</includes>
 		</fileSet>
 		<fileSet>
-			<directory>i18n</directory>
+			<directory>target/i18n</directory>
 			<outputDirectory>/i18n</outputDirectory>
 			<includes>
 				<include>**/*</include>
