@@ -35,6 +35,7 @@ import com.google.common.annotations.VisibleForTesting;
 import ro.sync.ecss.extensions.api.webapp.access.WebappPluginWorkspace;
 import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 import ro.sync.exml.workspace.api.options.WSOptionsStorage;
+import ro.sync.exml.workspace.api.util.XMLUtilAccess;
 
 /**
  * 
@@ -229,10 +230,11 @@ public class WebdavServletWrapper extends WebdavServlet {
       }
       if (!req.getRequestURL().toString().endsWith("/") && readOnly) {
         if (isOnlyTypeRequested(req.getInputStream())) {
+          XMLUtilAccess xmlUtilAccess = PluginWorkspaceProvider.getPluginWorkspace().getXMLUtilAccess();
           String response = 
             "<d:multistatus xmlns:d=\"DAV:\">"
             + "<d:response>"
-            +   "<d:href>" + this.getRelativePath(req)+ "</d:href>"
+            +   "<d:href>" + xmlUtilAccess.escapeTextValue(this.getRelativePath(req)) + "</d:href>"
             +   "<d:propstat>"
             +     "<d:prop><d:resourcetype/></d:prop>"
             +     "<d:status>HTTP/1.1 200 OK</d:status>"
@@ -240,7 +242,7 @@ public class WebdavServletWrapper extends WebdavServlet {
             + "</d:response>"
             + "</d:multistatus>";
           resp.setStatus(SC_MULTISTATUS);
-          resp.getWriter().print(response);
+          resp.getWriter().print(response); // NOSOAR - The XML is properly sanitized.
         } else {
           // In read-only mode, we prevent locking.
           resp.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
@@ -258,31 +260,31 @@ public class WebdavServletWrapper extends WebdavServlet {
    * @param is The request input stream.
    * @return <code>true</code> if only the resource type is requested.
    * 
-   * @throws IOException
+   * @throws IOException If we cannot read the input stream.
    */
   @VisibleForTesting
   static boolean isOnlyTypeRequested(InputStream is) throws IOException {
-    Document doc;
+    boolean onlyType = false;
     try {
       DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
       dbFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       dbFactory.setNamespaceAware(true);
       DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-      doc = dBuilder.parse(is);
-    } catch (ParserConfigurationException | SAXException e) {
-      return false;
-    }
-    
-    boolean onlyType = false;
-    NodeList props = doc.getElementsByTagNameNS("DAV:", "prop");
-    if (props.getLength() == 1 && props.item(0).getNodeType() == Node.ELEMENT_NODE) {
-      NodeList propChildren = props.item(0).getChildNodes();
-      if (propChildren.getLength() == 1 && 
-          propChildren.item(0).getLocalName().equals("resourcetype") && 
-          propChildren.item(0).getNamespaceURI().equals("DAV:")) {
-          onlyType = true;
+      Document doc = dBuilder.parse(is);
+
+      NodeList props = doc.getElementsByTagNameNS("DAV:", "prop");
+      if (props.getLength() == 1 && props.item(0).getNodeType() == Node.ELEMENT_NODE) {
+        NodeList propChildren = props.item(0).getChildNodes();
+        if (propChildren.getLength() == 1 && 
+            propChildren.item(0).getLocalName().equals("resourcetype") && 
+            propChildren.item(0).getNamespaceURI().equals("DAV:")) {
+            onlyType = true;
+        }
       }
+    } catch (ParserConfigurationException | SAXException e) {
+      // onlyType remains false.
     }
+
     return onlyType;
   }
 
