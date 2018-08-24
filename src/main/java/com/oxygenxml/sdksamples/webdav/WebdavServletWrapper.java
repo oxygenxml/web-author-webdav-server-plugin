@@ -18,9 +18,19 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.catalina.servlets.WebdavServlet;
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import com.google.common.annotations.VisibleForTesting;
 
 import ro.sync.ecss.extensions.api.webapp.access.WebappPluginWorkspace;
 import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
@@ -32,6 +42,7 @@ import ro.sync.exml.workspace.api.options.WSOptionsStorage;
  *
  */
 public class WebdavServletWrapper extends WebdavServlet {
+
   /**
    * Logger for logging.
    */
@@ -44,6 +55,10 @@ public class WebdavServletWrapper extends WebdavServlet {
    * The HTTP status code for "locked".
    */
   private static final int SC_LOCKED = 423;
+  /**
+   * HTTP status code for PROPFIND response.
+   */
+  private static final int SC_MULTISTATUS = 207;
   
   private Map<String, String> pathsMapping;
   
@@ -213,14 +228,64 @@ public class WebdavServletWrapper extends WebdavServlet {
         return;
       }
       if (!req.getRequestURL().toString().endsWith("/") && readOnly) {
-        // In read-only mode, we prevent locking.
-        resp.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+        if (isOnlyTypeRequested(req.getInputStream())) {
+          String response = 
+            "<d:multistatus xmlns:d=\"DAV:\">"
+            + "<d:response>"
+            +   "<d:href>" + this.getRelativePath(req)+ "</d:href>"
+            +   "<d:propstat>"
+            +     "<d:prop><d:resourcetype/></d:prop>"
+            +     "<d:status>HTTP/1.1 200 OK</d:status>"
+            +   "</d:propstat>"
+            + "</d:response>"
+            + "</d:multistatus>";
+          resp.setStatus(SC_MULTISTATUS);
+          resp.getWriter().print(response);
+        } else {
+          // In read-only mode, we prevent locking.
+          resp.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+        }
         return;
       }
     }
     super.service(req, resp);
   }
-  
+
+
+  /**
+   * Check if only the resource type is requested.
+   * 
+   * @param is The request input stream.
+   * @return <code>true</code> if only the resource type is requested.
+   * 
+   * @throws IOException
+   */
+  @VisibleForTesting
+  static boolean isOnlyTypeRequested(InputStream is) throws IOException {
+    Document doc;
+    try {
+      DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+      dbFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+      dbFactory.setNamespaceAware(true);
+      DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+      doc = dBuilder.parse(is);
+    } catch (ParserConfigurationException | SAXException e) {
+      return false;
+    }
+    
+    boolean onlyType = false;
+    NodeList props = doc.getElementsByTagNameNS("DAV:", "prop");
+    if (props.getLength() == 1 && props.item(0).getNodeType() == Node.ELEMENT_NODE) {
+      NodeList propChildren = props.item(0).getChildNodes();
+      if (propChildren.getLength() == 1 && 
+          propChildren.item(0).getLocalName().equals("resourcetype") && 
+          propChildren.item(0).getNamespaceURI().equals("DAV:")) {
+          onlyType = true;
+      }
+    }
+    return onlyType;
+  }
+
   @Override
   protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     if(isResourceLocked(req)) {
