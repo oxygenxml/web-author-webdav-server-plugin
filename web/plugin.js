@@ -21,7 +21,7 @@
   };
 
   /** @override */
-  sync.ui.SamplesTab.prototype.getTabContentElement = function () {
+  sync.ui.SamplesTab.prototype.insertTabContent = function (parentElement) {
     if (!this.samplesContainer) {
       var cD = goog.dom.createDom;
       // construct the dom structure for the samples.
@@ -89,7 +89,8 @@
         addNewStylesheet(domHelper, titleCss);
       }
     }
-    return this.samplesContainer;
+
+    parentElement.appendChild(this.samplesContainer);
   };
 
   /**
