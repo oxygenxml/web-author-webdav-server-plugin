@@ -12,3 +12,8 @@ One can create a folder located at *"webdav-server/users-dir/John_Doe/projectX"*
 
 This folder will be accessible only to users with this link **http://_[oxygen-webapp-host]_/plugins-dispatcher/webdav-server/1234asdf1234/** but the parent folder of this shared folder will be cosidered the root, just as a *1234asdf1234* folder was inside *webdav-server*.
 
+Copyright and License
+---------------------
+Copyright 2018 Syncro Soft SRL.
+
+This project is licensed under [Apache License 2.0](https://github.com/oxygenxml/web-author-webdav-server-plugin/blob/master/LICENSE)
