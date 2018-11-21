@@ -300,7 +300,11 @@ public class WebdavServletWrapper extends WebdavServlet {
       try {
         Class<?> repoManager = Class.forName("com.oxygenxml.sdksamples.webdav.repo.WebdavRepoManager");
         Method handlePutMethod = repoManager.getMethod("handlePut", HttpServletRequest.class, String.class);
-        handlePutMethod.invoke(null, req, path);
+        Object wrote = handlePutMethod.invoke(null, req, path);
+        if (!Boolean.TRUE.equals(wrote)) {
+          // The file was not written, possibly because it was read-only in the file system.
+          resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+        }
       } catch (ReflectiveOperationException e ) {
         // The WebAuthor is running in Tomcat 7.
         super.doPut(req, resp);
