@@ -5,8 +5,6 @@ import java.util.Map;
 
 import javax.servlet.ServletException;
 
-import org.apache.log4j.Logger;
-
 import ro.sync.ecss.extensions.api.webapp.access.WebappPluginWorkspace;
 import ro.sync.ecss.extensions.api.webapp.plugin.PluginConfigExtension;
 import ro.sync.exml.workspace.api.PluginResourceBundle;
@@ -15,11 +13,6 @@ import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
  * Extension for Webdav server configuration
  */
 public class ConfigWebdavServerExtension extends PluginConfigExtension {
-
-  /**
-   * Logger for logging.
-   */
-  private static final Logger logger = Logger.getLogger(ConfigWebdavServerExtension.class.getName());
   /**
    * Options namespace
    */

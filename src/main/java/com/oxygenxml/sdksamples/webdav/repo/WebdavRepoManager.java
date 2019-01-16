@@ -2,11 +2,14 @@ package com.oxygenxml.sdksamples.webdav.repo;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.catalina.Globals;
@@ -14,7 +17,11 @@ import org.apache.catalina.WebResource;
 import org.apache.catalina.WebResourceRoot;
 import org.apache.catalina.WebResourceRoot.ResourceSetType;
 import org.apache.catalina.WebResourceSet;
+import org.apache.catalina.webresources.Cache;
+import org.apache.catalina.webresources.StandardRoot;
+import org.apache.log4j.Logger;
 
+import ro.sync.basic.io.QuietClosable;
 import ro.sync.basic.util.URLUtil;
 
 
@@ -25,6 +32,11 @@ import ro.sync.basic.util.URLUtil;
  *
  */
 public class WebdavRepoManager {
+  /**
+   * Logger for logging.
+   */
+  private static final Logger logger = Logger.getLogger(WebdavRepoManager.class.getName());
+
 
   private static WebResourceRoot resources;
   
@@ -57,8 +69,23 @@ public class WebdavRepoManager {
   public static boolean handlePut(HttpServletRequest req, String path) throws IOException {
     boolean wroteResource = false;
     WebResourceSet resourceSet = getResourceSet(path);
-    ServletInputStream is = req.getInputStream();
-    wroteResource = resourceSet.write(path, is, true);
+    req.getInputStream();
+    try (InputStream is = QuietClosable.from(req.getInputStream())){
+      wroteResource = resourceSet.write(path, is, true);
+      
+      // Make sure that the cache entry for this file is cleared.
+      try {
+        Field cacheField = StandardRoot.class.getDeclaredField("cache");
+        cacheField.setAccessible(true);
+        Cache cache = (Cache) cacheField.get(resources);
+        
+        Method removeCacheEntryMethod = cache.getClass().getDeclaredMethod("removeCacheEntry", String.class);
+        removeCacheEntryMethod.setAccessible(true);
+        removeCacheEntryMethod.invoke(cache, path);
+      } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException | SecurityException | NoSuchMethodException e) {
+        logger.debug(e);
+      }
+    }
     return wroteResource;
   }
   
