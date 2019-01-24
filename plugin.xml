@@ -7,7 +7,7 @@
  name="WebDAV Server"
  description="Runs a builtin WebDAV server with locking support."
  version="${project.nosnapshot.version}"
- vendor="SyncRO"
+ vendor="Syncro Soft SRL"
  class="ro.sync.exml.plugin.Plugin">
   <runtime>
   <librariesFolder name="lib"/>
