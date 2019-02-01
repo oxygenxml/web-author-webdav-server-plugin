@@ -8,7 +8,13 @@
   <artifactId>web-author-webdav-server-plugin</artifactId>
   <name>Web Author WebDAV Server Plugin</name>
   <description>Web Author Plugin that provides a builtin WebDAV server for testing purposes.</description>
-  
+
+  <licenses>
+    <license>
+      <url>http://www.oxygenxml.com/sdk_agreement.html</url>
+    </license>
+  </licenses>
+
   <properties> 
     <oxygen.sdk.version>${project.version}</oxygen.sdk.version>
     <sonar.sources>src/main/java,web</sonar.sources>
