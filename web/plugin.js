@@ -308,9 +308,27 @@
         }
       }
 
-      // Disable the Ctrl+S shortcut.
-      var noopAction = new sync.actions.NoopAction('M1 S');
-      editor.getActionsManager().registerAction('DoNothing', noopAction);
+      /**
+       * An action which tells the user that saving is not possible.
+       * @constructor
+       * @extends {sync.actions.AbstractAction}
+       */
+      function CantSaveAction(keyStroke) {
+        sync.actions.AbstractAction.call(this, keyStroke);
+      }
+      CantSaveAction.prototype = Object.create(sync.actions.AbstractAction.prototype);
+      CantSaveAction.prototype.constructor = CantSaveAction;
+
+      /**
+       * @param callback The actionPerformed callback.
+       */
+      CantSaveAction.prototype.actionPerformed = function (callback) {
+        workspace.getNotificationManager().showWarning(tr(msgs.DOCUMENT_OPENED_AS_READ_ONLY_));
+        callback();
+      };
+
+      // // WA-2274: Disable the Ctrl+S shortcut.
+      editor.getActionsManager().registerAction('WebdavServer/CantSaveAction', new CantSaveAction("M1 S"), "M1 S");
 
       if(e.actionsConfiguration.toolbars.length) {
         var toolbarActions = e.actionsConfiguration.toolbars[0].children;
