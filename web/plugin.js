@@ -323,7 +323,9 @@
        * @param callback The actionPerformed callback.
        */
       CantSaveAction.prototype.actionPerformed = function (callback) {
-        workspace.getNotificationManager().showWarning(tr(msgs.DOCUMENT_OPENED_AS_READ_ONLY_));
+        if (editor.isDirty()) {
+          workspace.getNotificationManager().showWarning(tr(msgs.DOCUMENT_OPENED_AS_READ_ONLY_));
+        }
         callback();
       };
 
