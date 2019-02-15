@@ -338,14 +338,11 @@
           var currentAction = toolbarActions[i];
           if (currentAction.id === 'Author/Save') {
             // Replace the Save action withe download.
-            var downloadActionDescriptor = {id: 'Author/SaveLocal', type: 'action'};
+            var downloadActionDescriptor = {id: 'Author/Download', type: 'action'};
             toolbarActions.splice(i, 1, downloadActionDescriptor);
           }
         }
       }
-
-      editor.getActionsManager().registerAction('Author/SaveLocal',
-        new sync.actions.DownloadXMLAction(editor, ''));
     });
   }
 
