@@ -76,8 +76,9 @@
               },
               cD('img', {
                 className: 'dashboard-sample-image',
-                src: (defaultImage ? '../' : webdavServerPluginUrl) + imagePath}
-              ),
+                alt: '', // Mark image as presentation only (a11y).
+                src: (defaultImage ? '../' : webdavServerPluginUrl) + imagePath
+              }),
               cD('div', 'dashboard-sample-name', sampleName),
               cD('div', 'dashboard-sample-labels',
                 labelElements
