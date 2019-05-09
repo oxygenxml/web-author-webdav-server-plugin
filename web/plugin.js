@@ -107,7 +107,11 @@
       async: false,
       data: "",
       success: function (data_response) {
-        descriptor = data_response;
+        if(typeof data_response === 'string') {
+          descriptor = JSON.parse(data_response);
+        } else {
+          descriptor = data_response;
+        }
       },
       error: function () {
 
