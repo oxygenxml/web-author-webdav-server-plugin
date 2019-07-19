@@ -134,14 +134,10 @@
    */
   function getUrl(docUrl, ditamapUrl, authorName, urlParams) {
     var urlStr = "oxygen.html?";
-
     urlStr += 'url=webdav-' + encodeURIComponent((webdavServerPluginUrl + docUrl).replace('\\', '/'));
-
-    urlStr += '&showSave=true';
     if (ditamapUrl) {
-      urlStr += '&ditamap=webdav-' + encodeURIComponent((webdavServerPluginUrl + ditamapUrl).replace('\\', '/')) + '&';
+      urlStr += '&ditamap=webdav-' + encodeURIComponent((webdavServerPluginUrl + ditamapUrl).replace('\\', '/'));
     }
-
     if (urlParams) {
       for (var paramName in urlParams) {
         var paramValue = urlParams[paramName];
