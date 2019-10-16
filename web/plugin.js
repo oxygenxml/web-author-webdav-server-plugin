@@ -40,7 +40,8 @@
           var imagePath = sample['image'];
           var labels = sample['labels'];
           var urlParams = sample['urlParams'];
-          
+          var newSample = sample['new'];
+
           var defaultImage = false;
           if (!imagePath) {
             // The default image (if no one is provided in the samples descriptor)
@@ -67,24 +68,28 @@
             }
           }
 
-          goog.dom.appendChild(this.samplesContainer,
-            cD('a', {
-                className: 'dashboard-sample',
-                target: '_blank',
-                href: openUrl,
-                id: sampleId
-              },
-              cD('img', {
-                className: 'dashboard-sample-image',
-                alt: '', // Mark image as presentation only (a11y).
-                src: (defaultImage ? '../' : webdavServerPluginUrl) + imagePath
-              }),
-              cD('div', 'dashboard-sample-name', sampleName),
-              cD('div', 'dashboard-sample-labels',
-                labelElements
-              )
+          var dashboardSample = cD('a', {
+              className: 'dashboard-sample',
+              target: '_blank',
+              href: openUrl,
+              id: sampleId
+            },
+            cD('img', {
+              className: 'dashboard-sample-image',
+              alt: '', // Mark image as presentation only (a11y).
+              src: (defaultImage ? '../' : webdavServerPluginUrl) + imagePath
+            }),
+            cD('div', 'dashboard-sample-name', sampleName),
+            cD('div', 'dashboard-sample-labels',
+              labelElements
             )
-          );
+          )
+
+          goog.dom.appendChild(this.samplesContainer, dashboardSample);
+
+          if (newSample) {
+            goog.dom.classlist.add(dashboardSample, 'new-dashboard-sample');
+          }
         }
         // add styles before adding the elements.
         addNewStylesheet(domHelper, titleCss);
@@ -177,6 +182,16 @@
       'text-align: center;' +
       '}' +
 
+      '.dashboard-sample.new-dashboard-sample:before {' +
+      '    content: "";' +
+      '    height: 25px;' +
+      '    width: 37px;' +
+      '    top: 45px;' +
+      '    left: 25px;' +
+      '    position: absolute;' +
+      '    background: url(../plugin-resources/webdav-server/NewSample.png) no-repeat left;' +
+      '}' +
+
       '@media only screen and (min-width: 768px) {' +
       '#dashboard-samples-container {' +
       'padding: 30px 60px;' +
@@ -196,6 +211,7 @@
       'display: inline-block;' +
       'margin: 10px 60px 10px 60px;' +
       'text-decoration:none;' +
+      'position: relative;' +
       '}' +
 
       '.dashboard-sample-labels {' +
@@ -224,7 +240,7 @@
       '}' +
 
 
-    '.dashboard-sample:hover .dashboard-sample-label {' +
+      '.dashboard-sample:hover .dashboard-sample-label {' +
       'background-color: #34789d;' +
       ' }' +
 
@@ -367,12 +383,12 @@
 
     cssFormating.innerHTML =
       '#readonly-save-dialog {' +
-        'content: " ";'+
-        'width: 400px;' +
-        'line-height: 1.2em;' +
+      'content: " ";'+
+      'width: 400px;' +
+      'line-height: 1.2em;' +
       '}' +
       '#readonly-save-dialog {' +
-        'text-indent: 10px;' +
+      'text-indent: 10px;' +
       '}';
     document.head.appendChild(cssFormating);
   }
