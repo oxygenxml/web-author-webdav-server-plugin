@@ -134,19 +134,33 @@
    */
   function getUrl(docUrl, ditamapUrl, authorName, urlParams) {
     var urlStr = "oxygen.html?";
-    urlStr += 'url=webdav-' + encodeURIComponent((webdavServerPluginUrl + docUrl).replace('\\', '/'));
+    urlStr += 'url=' + getWebdavUrl(docUrl);
     if (ditamapUrl) {
-      urlStr += '&ditamap=webdav-' + encodeURIComponent((webdavServerPluginUrl + ditamapUrl).replace('\\', '/'));
+      urlStr += '&ditamap=' + getWebdavUrl(ditamapUrl);
     }
+
     if (urlParams) {
       for (var paramName in urlParams) {
         var paramValue = urlParams[paramName];
+        if (paramName === 'diffUrl' || paramName === 'diffBaseUrl') {
+          paramValue =  getWebdavUrl(paramValue);
+        }
         urlStr += '&' + paramName + '=' + paramValue;
       }
     }
 
     urlStr += '&author=' + authorName;
     return urlStr;
+  }
+
+  /**
+   * Get the webdav URL corresponding to a relative path.
+   *
+   * @param path The relative path.
+   * @return {string} The webdav URL.
+   */
+  function getWebdavUrl(path) {
+    return 'webdav-' + encodeURIComponent((webdavServerPluginUrl + path).replace('\\', '/'));
   }
 
   /**
