@@ -115,6 +115,7 @@ public class WebdavServletWrapper extends WebdavServlet {
       response.setContentType("application/octet-stream");
       response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
       response.setHeader("Content-Description", "File-Transfer");
+      response.setHeader("Cache-Control", "no-cache");
     }
     
     super.doGet(request, response);
