@@ -1,63 +1,87 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <translation>
-    <languageList>
-        <language description="English" lang="en_US"/>
-        <language description="German" lang="de_DE"/>
-        <language description="French" lang="fr_FR"/>
-        <language description="Japanese" lang="ja_JP"/>
-        <language description="Dutch" lang="nl_NL"/>
-    </languageList>
-    <key value="Display_samples" distribution="webauthor">
-        <comment>Label for checkbox option for displaying sample documents.</comment>
-        <val lang="en_US">Display samples</val>
-        <val lang="de_DE">Zeige Beispiele</val>
-        <val lang="fr_FR">Afficher les exemples</val>
-        <val lang="ja_JP">サンプルを表示する</val>
-        <val lang="nl_NL">Voorbeelden weergeven</val>
-    </key>
-    <key value="Readonly_mode" distribution="webauthor">
-        <comment>Label for checkbox option for displaying sample documents.</comment>
-        <val lang="en_US">Read-only mode</val>
-        <val lang="de_DE">Schreibgeschützter Modus</val>
-        <val lang="fr_FR">Mode lecture seule</val>
-        <val lang="ja_JP">読み取り専用モード</val>
-        <val lang="nl_NL">Alleen-lezen modus</val>
-    </key>
-    <key value="Enforce_server" distribution="webauthor">
-        <comment>Label for checkbox option setting the WebDAV server as enforced.</comment>
-        <val lang="en_US">Enforce server</val>
-        <val lang="de_DE">Erzwinge Server</val>
-        <val lang="fr_FR">Serveur forcé</val>
-        <val lang="ja_JP">サーバーを強制する</val>
-        <val lang="nl_NL">Server afdwingen</val>
-    </key>
-
-    <key value="WEBDAV_READ_ONLY_MODE_" distribution="webauthor">
-        <val lang="en_US">The WebDAV server is in read-only mode. {$P_START}This means that you can edit and download the document but you cannot save it to the server.{$P_END}{$P_START}Use the {$B_START}Download{$B_END} action from the {$B_START}More{$B_END} submenu to save the document to your computer{$P_END}</val>
-        <val lang="de_DE">Der WebDAV-Server befindet sich im schreibgeschützten Modus. {$P_START}Das bedeutet, dass Sie das Dokument bearbeiten und herunterladen, aber nicht auf dem Server speichern können.{$P_END}{$P_START}Verwenden Sie die {$B_START}Download{$B_END} Aktion aus dem {$B_START}Mehr{$B_END} Untermenü, um das Dokument auf Ihrem Computer zu speichern{$P_END}</val>
-        <val lang="fr_FR">Le serveur WebDAV est en mode lecture seule. {$P_START}Cela signifie que vous pouvez éditer et télécharger le document mais vous ne pouvez pas l'enregistrer sur le serveur.{$P_END}{$P_START}Utilisez l'action {$B_START}Télécharger{$B_END} depuis le sous-menu {$B_START}Plus{$B_END} pour enregistrer le document sur votre ordinateur{$P_END}</val>
-        <val lang="ja_JP">WebDAVサーバーは、読み取り専用モードです{$P_START}これは、ドキュメントを編集・ダウンロードできますが、サーバーに対して保存できないことを意味します。{$P_END}{$P_START}{$B_START}その他{$B_END}サブメニューの{$B_START}ダウンロード{$B_END}操作を使用して、コンピュータ上にドキュメントを保存します{$P_END}</val>
-        <val lang="nl_NL">De WebDAV-server bevindt zich in de alleen-lezen modus. {$P_START}Dit betekent dat u het document kunt bewerken en downloaden, maar niet kunt opslaan op de server.{$P_END}{$P_START}Gebruik de actie {$B_START}Downloaden{$B_END} in het submenu {$B_START}Meer{$B_END} als u het document wilt opslaan op uw computer{$P_END}</val>
-    </key>
-    <key value="READ_ONLY_DOCUMENT_" distribution="webauthor">
-        <val lang="en_US">Read-only document</val>
-        <val lang="de_DE">Schreibgeschütztes Dokument</val>
-        <val lang="fr_FR">Document en lecture seule</val>
-        <val lang="ja_JP">読み取り専用ドキュメント</val>
-        <val lang="nl_NL">Alleen-lezen document</val>
-    </key>
-    <key value="ANONYMOUS_" distribution="webauthor">
-        <val lang="en_US">Anonymous</val>
-        <val lang="de_DE">Anonym</val>
-        <val lang="fr_FR">Anonyme</val>
-        <val lang="ja_JP">匿名</val>
-        <val lang="nl_NL">Anoniem</val>
-    </key>
-    <key value="SAMPLES_" distribution="webauthor">
-        <val lang="en_US">Samples</val>
-        <val lang="de_DE">Beispiele</val>
-        <val lang="fr_FR">Exemples</val>
-        <val lang="ja_JP">例</val>
-        <val lang="nl_NL">Voorbeelden</val>
-    </key>
+  <languageList>
+    <language description="English" lang="en_US"/>
+    <language description="German" lang="de_DE"/>
+    <language description="French" lang="fr_FR"/>
+    <language description="Japanese" lang="ja_JP"/>
+    <language description="Dutch" lang="nl_NL"/>
+    <language description="Chinese" lang="zh_CN"/>
+  </languageList>
+  <key value="Display_samples" distribution="webauthor">
+    <comment>Label for checkbox option for displaying sample documents.</comment>
+    <val lang="en_US">Display samples</val>
+    <val lang="de_DE">Zeige Beispiele</val>
+    <val lang="fr_FR">Afficher les exemples</val>
+    <val lang="ja_JP">サンプルを表示する</val>
+    <val lang="nl_NL">Voorbeelden weergeven</val>
+    <val lang="zh_CN">Display samples</val>
+  </key>
+  <key value="Readonly_mode" distribution="webauthor">
+    <comment>Label for checkbox option for displaying sample documents.</comment>
+    <val lang="en_US">Read-only mode</val>
+    <val lang="de_DE">Schreibgeschützter Modus</val>
+    <val lang="fr_FR">Mode lecture seule</val>
+    <val lang="ja_JP">読み取り専用モード</val>
+    <val lang="nl_NL">Alleen-lezen modus</val>
+    <val lang="zh_CN">Read-only mode</val>
+  </key>
+  <key value="Enforce_server" distribution="webauthor">
+    <comment>Label for checkbox option setting the WebDAV server as enforced.</comment>
+    <val lang="en_US">Enforce server</val>
+    <val lang="de_DE">Erzwinge Server</val>
+    <val lang="fr_FR">Serveur forcé</val>
+    <val lang="ja_JP">サーバーを強制する</val>
+    <val lang="nl_NL">Server afdwingen</val>
+    <val lang="zh_CN">Enforce server</val>
+  </key>
+  <key value="WEBDAV_READ_ONLY_MODE_" distribution="webauthor">
+    <val lang="en_US">The WebDAV server is in read-only mode. {$P_START}This means that you can edit
+      and download the document but you cannot save it to the server.{$P_END}{$P_START}Use the
+      {$B_START}Download{$B_END} action from the {$B_START}More{$B_END} submenu to save the document
+      to your computer{$P_END}</val>
+    <val lang="de_DE">Der WebDAV-Server befindet sich im schreibgeschützten Modus. {$P_START}Das
+      bedeutet, dass Sie das Dokument bearbeiten und herunterladen, aber nicht auf dem Server
+      speichern können.{$P_END}{$P_START}Verwenden Sie die {$B_START}Download{$B_END} Aktion aus dem
+      {$B_START}Mehr{$B_END} Untermenü, um das Dokument auf Ihrem Computer zu
+      speichern{$P_END}</val>
+    <val lang="fr_FR">Le serveur WebDAV est en mode lecture seule. {$P_START}Cela signifie que vous
+      pouvez éditer et télécharger le document mais vous ne pouvez pas l'enregistrer sur le
+      serveur.{$P_END}{$P_START}Utilisez l'action {$B_START}Télécharger{$B_END} depuis le sous-menu
+      {$B_START}Plus{$B_END} pour enregistrer le document sur votre ordinateur{$P_END}</val>
+    <val lang="ja_JP"
+      >WebDAVサーバーは、読み取り専用モードです{$P_START}これは、ドキュメントを編集・ダウンロードできますが、サーバーに対して保存できないことを意味します。{$P_END}{$P_START}{$B_START}その他{$B_END}サブメニューの{$B_START}ダウンロード{$B_END}操作を使用して、コンピュータ上にドキュメントを保存します{$P_END}</val>
+    <val lang="nl_NL">De WebDAV-server bevindt zich in de alleen-lezen modus. {$P_START}Dit betekent
+      dat u het document kunt bewerken en downloaden, maar niet kunt opslaan op de
+      server.{$P_END}{$P_START}Gebruik de actie {$B_START}Downloaden{$B_END} in het submenu
+      {$B_START}Meer{$B_END} als u het document wilt opslaan op uw computer{$P_END}</val>
+    <val lang="zh_CN">The WebDAV server is in read-only mode. {$P_START}This means that you can edit
+      and download the document but you cannot save it to the server.{$P_END}{$P_START}Use the
+      {$B_START}Download{$B_END} action from the {$B_START}More{$B_END} submenu to save the document
+      to your computer{$P_END}</val>
+  </key>
+  <key value="READ_ONLY_DOCUMENT_" distribution="webauthor">
+    <val lang="en_US">Read-only document</val>
+    <val lang="de_DE">Schreibgeschütztes Dokument</val>
+    <val lang="fr_FR">Document en lecture seule</val>
+    <val lang="ja_JP">読み取り専用ドキュメント</val>
+    <val lang="nl_NL">Alleen-lezen document</val>
+    <val lang="zh_CN">Read-only document</val>
+  </key>
+  <key value="ANONYMOUS_" distribution="webauthor">
+    <val lang="en_US">Anonymous</val>
+    <val lang="de_DE">Anonym</val>
+    <val lang="fr_FR">Anonyme</val>
+    <val lang="ja_JP">匿名</val>
+    <val lang="nl_NL">Anoniem</val>
+    <val lang="zh_CN">Anonymous</val>
+  </key>
+  <key value="SAMPLES_" distribution="webauthor">
+    <val lang="en_US">Samples</val>
+    <val lang="de_DE">Beispiele</val>
+    <val lang="fr_FR">Exemples</val>
+    <val lang="ja_JP">例</val>
+    <val lang="nl_NL">Voorbeelden</val>
+    <val lang="zh_CN">Samples</val>
+  </key>
 </translation>
