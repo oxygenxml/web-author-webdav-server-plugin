@@ -377,20 +377,24 @@
     });
   }
 
+  var cssFormating = null;
   function loadEditorCSS() {
-    var domHelper = new goog.dom.DomHelper();
-    var cssFormating = domHelper.createDom('style');
-
-    cssFormating.innerHTML =
-      '#readonly-save-dialog {' +
-        'content: " ";'+
-        'width: 400px;' +
-        'line-height: 1.2em;' +
-      '}' +
-      '#readonly-save-dialog {' +
-        'text-indent: 10px;' +
-      '}';
-    document.head.appendChild(cssFormating);
+    if (!cssFormating) {
+      var domHelper = new goog.dom.DomHelper();
+      cssFormating = domHelper.createDom('style');
+  
+  
+      cssFormating.innerHTML =
+        '#readonly-save-dialog {' +
+          'content: " ";'+
+          'width: 400px;' +
+          'line-height: 1.2em;' +
+        '}' +
+        '#readonly-save-dialog {' +
+          'text-indent: 10px;' +
+        '}';
+      document.head.appendChild(cssFormating);
+    }
   }
 
   setTimeout(function() {
