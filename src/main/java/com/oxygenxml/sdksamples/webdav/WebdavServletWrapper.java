@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.security.AccessControlException;
+import java.lang.SecurityException;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
@@ -276,10 +276,12 @@ public class WebdavServletWrapper extends WebdavServlet {
         URL serverUrl = new URL(url);
         URL selfUrl = new URL(serverUrl.getProtocol() + "://" + serverUrl.getHost() + ":" + (serverUrl.getPort() != -1 ? serverUrl.getPort() : serverUrl.getDefaultPort()));
         selfUrl.openConnection().getInputStream();
-      } catch (AccessControlException e) {
-        return false;
       } catch (IOException e) {
-        return true;
+        if (e.getCause() instanceof SecurityException) {
+          return false;
+        } else {
+          return true;
+        }
       }
     } else {
       // Maybe an old plugin.
