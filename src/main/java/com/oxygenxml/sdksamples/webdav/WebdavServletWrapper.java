@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
+import java.net.URL;
+import java.security.AccessControlException;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
@@ -117,7 +119,15 @@ public class WebdavServletWrapper extends WebdavServlet {
       response.setHeader("Content-Description", "File-Transfer");
       response.setHeader("Cache-Control", "no-cache");
     }
-    
+
+    String serverUrl = request.getParameter("serverUrl");
+    if (serverUrl != null) {
+      boolean canAccess = canAccessUrl(serverUrl);
+      if (!canAccess) {
+        response.setStatus(206);
+      }
+    }
+
     super.doGet(request, response);
   }
 
@@ -254,6 +264,28 @@ public class WebdavServletWrapper extends WebdavServlet {
     super.service(req, resp);
   }
 
+
+  /**
+   * Check if the given URL can be accessed accordingly to the security manager.
+   * @param url The url.
+   * @return <code>false</code> if the URL cannote be accessed.
+   */
+  private boolean canAccessUrl(String url) {
+    if (url != null) {
+      try {
+        URL serverUrl = new URL(url);
+        URL selfUrl = new URL(serverUrl.getProtocol() + "://" + serverUrl.getHost() + ":" + (serverUrl.getPort() != -1 ? serverUrl.getPort() : serverUrl.getDefaultPort()));
+        selfUrl.openConnection().getInputStream();
+      } catch (AccessControlException e) {
+        return false;
+      } catch (IOException e) {
+        return true;
+      }
+    } else {
+      // Maybe an old plugin.
+    }
+    return true;
+  }
 
   /**
    * Check if only the resource type is requested.

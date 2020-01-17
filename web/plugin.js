@@ -28,6 +28,7 @@
       var domHelper = new goog.dom.DomHelper();
       this.samplesContainer = cD('div', {id: 'dashboard-samples-container'});
       this.samplesContainer.style.display = 'none';
+      this.samplesContainer.style.position = 'relative';
       var descriptor = retrieveSamplesDescriptor();
       if (descriptor) {
         var samples = descriptor['samples'];
@@ -96,7 +97,62 @@
       }
     }
 
-    parentElement.appendChild(this.samplesContainer);
+      parentElement.appendChild(this.samplesContainer);
+
+    if (descriptor.trustedHostNotConfigured) {
+      var transparentLayer = cD("div", "not-configured");
+      goog.style.setStyle(
+        transparentLayer,
+        {
+          position: "absolute",
+          top: 0,
+          left: 0,
+          height: "100%",
+          width: "100%",
+          background: "#cdcdcd",
+          opacity: "0.2"
+        }
+      );
+
+      var host = "";
+      var hostIndexStart = href.indexOf("://");
+      if (hostIndexStart !== -1) {
+        hostIndexStart += 3;
+        var hostIndexEnd = href.indexOf("/", hostIndexStart);
+        host = "\"" + href.substring(hostIndexStart, hostIndexEnd) + "\"";
+      }
+
+      var linkHref = href.substring(0, href.length - "oxygen.html".length) + "admin.html#Security";
+      var link = cD("a", {
+          href: linkHref,
+        },
+        "Security section from Administration page");
+      var configureTrustedHostLabel = cD("div", null,
+        [
+          cD("span", {}, "Samples aren't available because the built-in isn't trusted."),
+          cD("br",),
+          cD("span", {}, "Go to the "),
+          link,
+          cD("span", {}, "  and add " + host + " in the trusted hosts list."),
+        ]);
+      goog.style.setStyle(
+        configureTrustedHostLabel,
+        {
+          position: "absolute",
+          top: "0em",
+          left: "0em",
+          background: "white",
+          padding: "0.5em",
+          width: "100%",
+          borderBottom: "1px solid #AAAAAA",
+          fontSize: "1.1em",
+          textAlign: "left"
+        }
+      );
+
+      goog.dom.appendChild(this.samplesContainer, transparentLayer);
+      goog.dom.appendChild(this.samplesContainer, configureTrustedHostLabel);
+    }
   };
 
   /**
@@ -109,15 +165,17 @@
 
     $.ajax({
       type: "GET",
-      url: webdavServerPluginUrl + '.descriptor/samples.json',
+      url: webdavServerPluginUrl + '.descriptor/samples.json?serverUrl=' + encodeURIComponent(window.webdavServerPluginUrl + '.descriptor/samples.json'),
       async: false,
       data: "",
-      success: function (data_response) {
+      success: function (data_response, success, req) {
         if(typeof data_response === 'string') {
           descriptor = JSON.parse(data_response);
         } else {
           descriptor = data_response;
         }
+        console.log("req.status ", req.status);
+        descriptor.trustedHostNotConfigured = (req.status === 206);
       },
       error: function () {
 
@@ -273,6 +331,10 @@
   if('on' === sync.options.PluginsOptions.getClientOption('webdav_server_plugin_enforce_url')) {
     window.addEnforcedWebdavUrl && window.addEnforcedWebdavUrl(baseUrl);
   }
+
+  if('true' === sync.options.PluginsOptions.getClientOption('trusted_host_not_configured')) {
+    window.trustedHostNotConfigured = true;
+  }
   // load samples thumbails.
   goog.events.listen(
     workspace, sync.api.Workspace.EventType.BEFORE_DASHBOARD_LOADED, function() {
@@ -382,8 +444,6 @@
     if (!cssFormating) {
       var domHelper = new goog.dom.DomHelper();
       cssFormating = domHelper.createDom('style');
-  
-  
       cssFormating.innerHTML =
         '#readonly-save-dialog {' +
           'content: " ";'+
