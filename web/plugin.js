@@ -124,16 +124,16 @@
 
       var linkHref = href.substring(0, href.length - "oxygen.html".length) + "admin.html#Security";
       var link = cD("a", {
-          href: linkHref,
+          href: linkHref
         },
         "Security section from Administration page");
       var configureTrustedHostLabel = cD("div", null,
         [
           cD("span", {}, "Samples aren't available because the built-in isn't trusted."),
-          cD("br",),
+          cD("br"),
           cD("span", {}, "Go to the "),
           link,
-          cD("span", {}, "  and add " + host + " in the trusted hosts list."),
+          cD("span", {}, "  and add " + host + " in the trusted hosts list.")
         ]);
       goog.style.setStyle(
         configureTrustedHostLabel,
@@ -233,7 +233,7 @@
    */
   function addNewStylesheet(domHelper, dynamicCss) {
     var cssFormating = domHelper.createDom('style');
-    cssFormating.innerHTML =
+    cssFormating.textContent =
       '#dashboard-samples-container {' +
       'display: block !important;' +
       'text-align: center;' +
@@ -377,7 +377,7 @@
           if(!readonlySaveDialog) {
             readonlySaveDialog = workspace.createDialog();
             readonlySaveDialog.setTitle(tr(msgs.READ_ONLY_DOCUMENT_));
-            readonlySaveDialog.getElement().innerHTML = '';
+            goog.dom.removeChildren(readonlySaveDialog.getElement());
             var googCreateDom = goog.dom.createDom;
             goog.dom.append(readonlySaveDialog.getElement(),
               googCreateDom('div', {id: 'readonly-save-dialog'},
@@ -443,7 +443,7 @@
     if (!cssFormating) {
       var domHelper = new goog.dom.DomHelper();
       cssFormating = domHelper.createDom('style');
-      cssFormating.innerHTML =
+      cssFormating.textContent =
         '#readonly-save-dialog {' +
           'content: " ";'+
           'width: 400px;' +
