@@ -221,7 +221,7 @@
    */
   function addNewStylesheet(domHelper, dynamicCss) {
     var cssFormating = domHelper.createDom('style');
-    cssFormating.innerHTML =
+    cssFormating.textContent =
       '#dashboard-samples-container {' +
       'display: block !important;' +
       'text-align: center;' +
@@ -362,7 +362,7 @@
           if(!readonlySaveDialog) {
             readonlySaveDialog = workspace.createDialog();
             readonlySaveDialog.setTitle(tr(msgs.READ_ONLY_DOCUMENT_));
-            readonlySaveDialog.getElement().innerHTML = '';
+            goog.dom.removeChildren(readonlySaveDialog.getElement());
             var googCreateDom = goog.dom.createDom;
             goog.dom.append(readonlySaveDialog.getElement(),
               googCreateDom('div', {id: 'readonly-save-dialog'},
@@ -428,7 +428,7 @@
     if (!cssFormating) {
       var domHelper = new goog.dom.DomHelper();
       cssFormating = domHelper.createDom('style');
-      cssFormating.innerHTML =
+      cssFormating.textContent =
         '#readonly-save-dialog {' +
           'content: " ";'+
           'width: 400px;' +
