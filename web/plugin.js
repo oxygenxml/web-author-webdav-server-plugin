@@ -114,26 +114,14 @@
         }
       );
 
-      var host = "";
-      var hostIndexStart = href.indexOf("://");
-      if (hostIndexStart !== -1) {
-        hostIndexStart += 3;
-        var hostIndexEnd = href.indexOf("/", hostIndexStart);
-        host = "\"" + href.substring(hostIndexStart, hostIndexEnd) + "\"";
-      }
-
-      var linkHref = href.substring(0, href.length - "oxygen.html".length) + "admin.html#Security";
-      var link = cD("a", {
-          href: linkHref,
-        },
-        "Security section from Administration page");
+      var adminPageLink = href.substring(0, href.length - "oxygen.html".length) + "admin.html#Security";
       var configureTrustedHostLabel = cD("div", null,
         [
-          cD("span", {}, "Samples aren't available because the built-in isn't trusted."),
-          cD("br",),
-          cD("span", {}, "Go to the "),
-          link,
-          cD("span", {}, "  and add " + host + " in the trusted hosts list."),
+          cD("span", {},
+            trDom(msgs.SERVER_NOT_TRUSTED, {
+            '$SERVER': cD("i", {}, window.webdavServerPluginUrl),
+            '$ADM_PAGE': cD("a", {href: adminPageLink}, tr(msgs.ADMINISTRATION_PAGE))
+          }))
         ]);
       goog.style.setStyle(
         configureTrustedHostLabel,
@@ -331,9 +319,6 @@
     window.addEnforcedWebdavUrl && window.addEnforcedWebdavUrl(baseUrl);
   }
 
-  if('true' === sync.options.PluginsOptions.getClientOption('trusted_host_not_configured')) {
-    window.trustedHostNotConfigured = true;
-  }
   // load samples thumbails.
   goog.events.listen(
     workspace, sync.api.Workspace.EventType.BEFORE_DASHBOARD_LOADED, function() {
