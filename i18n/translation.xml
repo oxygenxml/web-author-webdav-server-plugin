@@ -12,7 +12,7 @@
     <comment>Message presented when server is not marked as trusted.</comment>
     <val lang="en_US">The sample files cannot be opened because the built-in WebDAV server, {$SERVER}, is not configured as trusted in the {$ADM_PAGE}.</val>
     <val lang="de_DE">The sample files cannot be opened because the built-in WebDAV server, {$SERVER}, is not configured as trusted in the {$ADM_PAGE}.</val>
-    <val lang="fr_FR">The sample files cannot be opened because the built-in WebDAV server, {$SERVER}, is not configured as trusted in the {$ADM_PAGE}.</val>
+    <val lang="fr_FR">Les fichiers échantillons ne peuvent pas être ouverts car le serveur WebDAV intégré, {$SERVER}, n'est pas configuré comme étant de fiable dans la {$ADM_PAGE}.</val>
     <val lang="ja_JP">The sample files cannot be opened because the built-in WebDAV server, {$SERVER}, is not configured as trusted in the {$ADM_PAGE}.</val>
     <val lang="nl_NL">The sample files cannot be opened because the built-in WebDAV server, {$SERVER}, is not configured as trusted in the {$ADM_PAGE}.</val>
     <val lang="zh_CN">The sample files cannot be opened because the built-in WebDAV server, {$SERVER}, is not configured as trusted in the {$ADM_PAGE}.</val>
