@@ -97,9 +97,9 @@
       }
     }
 
-      parentElement.appendChild(this.samplesContainer);
+    parentElement.appendChild(this.samplesContainer);
 
-    if (descriptor.trustedHostNotConfigured) {
+    if (descriptor && descriptor.trustedHostNotConfigured) {
       var transparentLayer = cD("div", "not-configured");
       goog.style.setStyle(
         transparentLayer,
