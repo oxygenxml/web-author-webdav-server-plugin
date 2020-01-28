@@ -38,6 +38,7 @@
           var sample = samples[i];
           var path = sample['path'];
           var ditamap = sample['ditamap'];
+          var schematronUrl = sample['schematronUrl'];
           var imagePath = sample['image'];
           var labels = sample['labels'];
           var urlParams = sample['urlParams'];
@@ -53,7 +54,7 @@
 
           // Open the sample document in a new tab when the sample image is clicked.
           var author = sync.util.getURLParameter('author') || tr(msgs.ANONYMOUS_);
-          var openUrl = getUrl(path, ditamap, author, urlParams);
+          var openUrl = getUrl(path, ditamap, schematronUrl, author, urlParams);
           var sampleName = sample['name'];
           var sampleId = 'sample-title-' + sampleName.replace(/ /g, '-');
 
@@ -177,16 +178,21 @@
    *
    * @param docUrl the document url.
    * @param ditamapUrl the ditamap url.
+   * @param schematronUrl the schematron url.
    * @param authorName the author name.
    * @param urlParams url parameters.
    *
    * @return {string} the document url.
    */
-  function getUrl(docUrl, ditamapUrl, authorName, urlParams) {
+  function getUrl(docUrl, ditamapUrl, schematronUrl, authorName, urlParams) {
     var urlStr = "oxygen.html?";
     urlStr += 'url=' + getWebdavUrl(docUrl);
     if (ditamapUrl) {
       urlStr += '&ditamap=' + getWebdavUrl(ditamapUrl);
+    }
+
+    if (schematronUrl) {
+      urlStr += '&schematronUrl=' + getWebdavUrl(schematronUrl);
     }
 
     if (urlParams) {
