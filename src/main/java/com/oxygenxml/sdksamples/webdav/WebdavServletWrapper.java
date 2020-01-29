@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.lang.SecurityException;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
@@ -110,25 +109,25 @@ public class WebdavServletWrapper extends WebdavServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
     // Force the download for get requests.
-    String path = getRelativePath(request);
-    if(isFile(path)) {
-      String fileName = getFileName(path);
-      // Set download headers.
+    String filePath = getRelativePath(request);
+    if(isFile(filePath)) {
       response.setContentType("application/octet-stream");
-      response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-      response.setHeader("Content-Description", "File-Transfer");
       response.setHeader("Cache-Control", "no-cache");
-    }
+      response.setHeader("Content-Description", "File-Transfer");
 
-    String serverUrl = request.getParameter("serverUrl");
-    if (serverUrl != null) {
-      boolean canAccess = canAccessUrl(serverUrl);
-      if (!canAccess) {
-        response.setStatus(206);
+      String serverUrlParam = request.getParameter("serverUrl");
+      boolean canAccess = serverUrlParam == null || canAccessUrl(serverUrlParam);
+      if (canAccess) {
+        // Set download headers.
+        String fileName = getFileName(filePath);
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+        super.doGet(request, response);
+      } else {
+        response.getWriter().print("{\"trustedHostNotConfigured\": \"true\"}");
       }
+    } else {
+      super.doGet(request, response);
     }
-
-    super.doGet(request, response);
   }
 
   @Override
@@ -465,16 +464,16 @@ public class WebdavServletWrapper extends WebdavServlet {
   /**
    * Whether the requested resources is a file.
    * 
-   * @param path the resource path.
+   * @param filePath the resource path.
    * 
    * @return whether the resources is a file.
    */
-  private boolean isFile(String path) {
+  private boolean isFile(String filePath) {
     boolean isFile = false;
     try {
       Class<?> repoManager = Class.forName("com.oxygenxml.sdksamples.webdav.repo.WebdavRepoManager");
       Method isFileMethod = repoManager.getMethod("isFile", String.class);
-      isFile = (Boolean)isFileMethod.invoke(null, path);
+      isFile = (Boolean)isFileMethod.invoke(null, filePath);
     } catch (ReflectiveOperationException e) {}
     
     return isFile;

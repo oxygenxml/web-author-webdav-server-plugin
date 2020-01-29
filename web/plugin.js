@@ -162,7 +162,6 @@
         } else {
           descriptor = data_response;
         }
-        descriptor.trustedHostNotConfigured = (req.status === 206);
       },
       error: function () {
 
