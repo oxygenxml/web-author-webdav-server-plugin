@@ -18,5 +18,9 @@
        <directory>resources</directory>
        <outputDirectory>/resources</outputDirectory>
      </fileSet>
+     <fileSet>
+       <directory>framework</directory>
+       <outputDirectory>/framework</outputDirectory>
+     </fileSet>
   </fileSets>  
 </assembly>

@@ -15,7 +15,7 @@
     <val lang="fr_FR">Les fichiers échantillons ne peuvent pas être ouverts car le serveur WebDAV intégré, {$SERVER}, n'est pas configuré comme étant de fiable dans la {$ADM_PAGE}.</val>
     <val lang="ja_JP">組み込み WebDAV サーバー {$SERVER} が {$ADM_PAGE} で信頼済みとして構成されていないため、サンプルファイルを開くことができません。</val>
     <val lang="nl_NL">Kan de voorbeeldbestanden niet openen omdat de ingebouwde WebDAV-server, {$SERVER}, niet als vertrouwd is geconfigureerd op de {$ADM_PAGE}.</val>
-    <val lang="zh_CN">无法打开示例文件，因为内置的WebDAV服务器{$server}未在{$ADM_PAGE}中配置为受信任.</val>
+    <val lang="zh_CN">无法打开示例文件，因为内置的WebDAV服务器{$SERVER}未在{$ADM_PAGE}中配置为受信任.</val>
   </key>
   <key value="Administration_page" distribution="webauthor">
     <comment>Label for Administration Page.</comment>
