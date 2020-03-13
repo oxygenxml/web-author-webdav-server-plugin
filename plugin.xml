@@ -13,7 +13,8 @@
   <librariesFolder name="lib"/>
   <library name="target/classes"/>
  </runtime>
- 
+
+<extension type="AdditionalFrameworks" path="framework/"/>
  <extension type="WebappServlet" role="config"
   class="com.oxygenxml.sdksamples.webdav.ConfigWebdavServerExtension"/>
  <extension type="WebappServlet" 
