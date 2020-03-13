@@ -19,7 +19,8 @@ import org.apache.catalina.WebResourceRoot.ResourceSetType;
 import org.apache.catalina.WebResourceSet;
 import org.apache.catalina.webresources.Cache;
 import org.apache.catalina.webresources.StandardRoot;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import ro.sync.basic.io.QuietClosable;
 import ro.sync.basic.util.URLUtil;
@@ -35,7 +36,7 @@ public class WebdavRepoManager {
   /**
    * Logger for logging.
    */
-  private static final Logger logger = Logger.getLogger(WebdavRepoManager.class.getName());
+  private static final Logger logger = LogManager.getLogger(WebdavRepoManager.class.getName());
 
 
   private static WebResourceRoot resources;

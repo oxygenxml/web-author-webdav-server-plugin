@@ -25,7 +25,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.catalina.servlets.WebdavServlet;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -48,7 +49,7 @@ public class WebdavServletWrapper extends WebdavServlet {
   /**
    * Logger for logging.
    */
-  private static final Logger logger = Logger.getLogger(WebdavServletWrapper.class.getName());
+  private static final Logger logger = LogManager.getLogger(WebdavServletWrapper.class.getName());
 
   private static final long serialVersionUID = 1L;
   private static final String METHOD_PROPFIND = "PROPFIND";
