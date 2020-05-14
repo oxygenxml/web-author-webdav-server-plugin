@@ -241,7 +241,7 @@
       '    height: 25px;' +
       '    width: 37px;' +
       '    top: 45px;' +
-      '    left: 25px;' +
+      '    left: 5px;' +
       '    position: absolute;' +
       '    background: url(../plugin-resources/webdav-server/NewSample.png) no-repeat left;' +
       '}' +
