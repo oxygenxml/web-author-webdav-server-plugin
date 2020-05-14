@@ -257,13 +257,13 @@
       'display: inline-block;' +
       'height: 159px;' +
       'width: 125px;' +
-      'margin:50px 30px 0px;' +
+      'margin:50px 10px 0px;' +
       'border: 2px solid #cccccc;' +
       '}' +
 
       '.dashboard-sample {' +
       'display: inline-block;' +
-      'margin: 10px 60px 10px 60px;' +
+      'margin: 5px 40px 5px 40px;' +
       'text-decoration:none;' +
       'position: relative;' +
       '}' +
