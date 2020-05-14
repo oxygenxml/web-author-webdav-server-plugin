@@ -241,15 +241,9 @@
       '    height: 25px;' +
       '    width: 37px;' +
       '    top: 45px;' +
-      '    left: 5px;' +
+      '    left: 25px;' +
       '    position: absolute;' +
       '    background: url(../plugin-resources/webdav-server/NewSample.png) no-repeat left;' +
-      '}' +
-
-      '@media only screen and (min-width: 768px) {' +
-      '#dashboard-samples-container {' +
-      'padding: 30px 60px;' +
-      '}' +
       '}' +
 
       '#dashboard-samples-container .dashboard-sample-image {' +
@@ -257,13 +251,13 @@
       'display: inline-block;' +
       'height: 159px;' +
       'width: 125px;' +
-      'margin:50px 10px 0px;' +
+      'margin:50px 30px 0px;' +
       'border: 2px solid #cccccc;' +
       '}' +
 
       '.dashboard-sample {' +
       'display: inline-block;' +
-      'margin: 5px 40px 5px 40px;' +
+      'margin: 10px 50px 10px 50px;' +
       'text-decoration:none;' +
       'position: relative;' +
       '}' +
