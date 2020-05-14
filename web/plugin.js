@@ -288,7 +288,7 @@
       ' }' +
       
       '.dashboard-new-sample-label {' +
-      'background-color: #fdb443;' +
+      'background-color: #fecb7c;' +
       'color: #000;' +
       'font-weight: bold;' +
       ' }' +
@@ -303,8 +303,12 @@
       '}' +
 
 
-    '.dashboard-sample:hover .dashboard-sample-label {' +
+      '.dashboard-sample:hover .dashboard-sample-label {' +
       'background-color: #34789d;' +
+      ' }' +
+
+      '.dashboard-sample:hover .dashboard-new-sample-label {' +
+      'background-color: #fdb443;' +
       ' }' +
 
       '.dashboard-sample-name {' +
