@@ -40,6 +40,7 @@
           var ditamap = sample['ditamap'];
           var imagePath = sample['image'];
           var labels = sample['labels'];
+          var newLabels = sample['newLabels'];
           var urlParams = sample['urlParams'];
           var newSample = sample['new'];
           
@@ -59,10 +60,19 @@
 
           // Make label elements.
           var labelElements = [];
+          if (newLabels) {
+            var newLabelsTexts = newLabels.split(',');
+            for (var j in newLabelsTexts) {
+              var newLabelText = newLabelsTexts[j];
+              if (newLabelText) {
+                labelElements.push(cD('span', 'dashboard-new-sample-label', newLabelText.trim()));
+              }
+            }
+          }
           if (labels) {
             var labelsTexts = labels.split(',');
-            for (var j in labelsTexts) {
-              var labelText = labelsTexts[j];
+            for (var k in labelsTexts) {
+              var labelText = labelsTexts[k];
               if (labelText) {
                 labelElements.push(cD('span', 'dashboard-sample-label', labelText.trim()));
               }
@@ -263,15 +273,24 @@
       'margin-bottom: 10px;' +
       ' }' +
 
-      '.dashboard-sample-label {' +
+      '.dashboard-sample-label, .dashboard-new-sample-label {' +
       'font-size: 70%;' +
-      ' border: 0px solid #ddd;' +
-      'background-color: #b4b4b4;' +
+      'border: 0px solid #ddd;' +
       'border-radius: 4px;' +
       'padding: 1px 6px;' +
       'margin-left: 5px;' +
-      'color: #fff;' +
       'cursor: pointer;' +
+      ' }' +
+      
+      '.dashboard-sample-label {' +
+      'background-color: #b4b4b4;' +
+      'color: #fff;' +
+      ' }' +
+      
+      '.dashboard-new-sample-label {' +
+      'background-color: #fdb443;' +
+      'color: #000;' +
+      'font-weight: bold;' +
       ' }' +
 
 
