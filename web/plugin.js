@@ -246,12 +246,18 @@
       '    background: url(../plugin-resources/webdav-server/NewSample.png) no-repeat left;' +
       '}' +
 
+      '@media only screen and (min-width: 768px) {' +
+      '#dashboard-samples-container {' +
+      'padding: 10px 20px;' +
+      '}' +
+      '}' +
+
       '#dashboard-samples-container .dashboard-sample-image {' +
       'background-color: #FFFFFF;' +
       'display: inline-block;' +
       'height: 159px;' +
       'width: 125px;' +
-      'margin:50px 30px 0px;' +
+      'margin:25px 30px 0px;' +
       'border: 2px solid #cccccc;' +
       '}' +
 
