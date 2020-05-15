@@ -240,7 +240,7 @@
       '    content: "";' +
       '    height: 25px;' +
       '    width: 37px;' +
-      '    top: 45px;' +
+      '    top: 20px;' +
       '    left: 25px;' +
       '    position: absolute;' +
       '    background: url(../plugin-resources/webdav-server/NewSample.png) no-repeat left;' +
