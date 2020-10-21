@@ -15,6 +15,16 @@
     </license>
   </licenses>
 
+  <developers>
+    <developer>
+      <name>Mihai Coanda</name>
+      <email>mihai_coanda@sync.ro</email>
+      <roles>
+        <role>manager</role>
+      </roles>
+    </developer>
+  </developers>
+
   <properties> 
     <oxygen.sdk.version>${project.version}</oxygen.sdk.version>
     <sonar.sources>src/main/java,web</sonar.sources>
