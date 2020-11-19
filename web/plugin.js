@@ -31,6 +31,7 @@
       this.samplesContainer.style.position = 'relative';
       var descriptor = retrieveSamplesDescriptor();
       if (descriptor) {
+        var globalHighlightedActions = descriptor['highlightedActions'] || [];
         var samples = descriptor['samples'];
         var titleCss = '';
 
@@ -43,7 +44,8 @@
           var newLabels = sample['newLabels'];
           var urlParams = sample['urlParams'];
           var newSample = sample['new'];
-          
+          var highlightedActions = sample['highlightedActions'] || [];
+          highlightedActions = highlightedActions.concat(globalHighlightedActions);
           var defaultImage = false;
           if (!imagePath) {
             // The default image (if no one is provided in the samples descriptor)
@@ -54,7 +56,7 @@
 
           // Open the sample document in a new tab when the sample image is clicked.
           var author = sync.util.getURLParameter('author') || tr(msgs.ANONYMOUS_);
-          var openUrl = getUrl(path, ditamap, author, urlParams);
+          var openUrl = getUrl(path, ditamap, author, urlParams, highlightedActions);
           var sampleName = sample['name'];
           var sampleId = 'sample-title-' + sampleName.replace(/ /g, '-');
 
@@ -174,10 +176,11 @@
    * @param ditamapUrl the ditamap url.
    * @param authorName the author name.
    * @param urlParams url parameters.
+   * @param {Object} highlightedActions The highlighted actions.
    *
    * @return {string} the document url.
    */
-  function getUrl(docUrl, ditamapUrl, authorName, urlParams) {
+  function getUrl(docUrl, ditamapUrl, authorName, urlParams, highlightedActions) {
     var urlStr = "oxygen.html?";
     urlStr += 'url=' + getWebdavUrl(docUrl);
     if (ditamapUrl) {
@@ -195,6 +198,11 @@
     }
 
     urlStr += '&author=' + authorName;
+
+    if (highlightedActions.length) {
+      urlStr += '&highlightedActions=' + encodeURIComponent(JSON.stringify(highlightedActions));
+    }
+
     return urlStr;
   }
 
