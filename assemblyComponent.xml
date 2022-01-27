@@ -1,10 +1,10 @@
 <component>
 	<fileSets>
 		<fileSet>
-			<directory>target/web</directory>
+			<directory>target</directory>
 			<outputDirectory>/web</outputDirectory>
 			<includes>
-				<include>**/*</include>
+				<include>plugin.js</include>
 			</includes>
 		</fileSet>
 		<fileSet>
