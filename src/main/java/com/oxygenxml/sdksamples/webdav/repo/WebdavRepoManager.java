@@ -19,9 +19,8 @@ import org.apache.catalina.WebResourceRoot.ResourceSetType;
 import org.apache.catalina.WebResourceSet;
 import org.apache.catalina.webresources.Cache;
 import org.apache.catalina.webresources.StandardRoot;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
+import lombok.extern.slf4j.Slf4j;
 import ro.sync.basic.io.QuietClosable;
 import ro.sync.basic.util.URLUtil;
 
@@ -32,12 +31,8 @@ import ro.sync.basic.util.URLUtil;
  * @author mihai_coanda
  *
  */
+@Slf4j
 public class WebdavRepoManager {
-  /**
-   * Logger for logging.
-   */
-  private static final Logger logger = LogManager.getLogger(WebdavRepoManager.class.getName());
-
 
   private static WebResourceRoot resources;
   
@@ -84,7 +79,7 @@ public class WebdavRepoManager {
         removeCacheEntryMethod.setAccessible(true);
         removeCacheEntryMethod.invoke(cache, path);
       } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException | SecurityException | NoSuchMethodException e) {
-        logger.debug(e);
+        log.debug(e);
       }
     }
     return wroteResource;
