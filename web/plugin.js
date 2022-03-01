@@ -81,27 +81,29 @@
             }
           }
 
-          var dashboardSample = cD('a', {
+          var dashboardSampleImage = cD('div', 'dashboard-sample-image-wrp',
+            cD('img', {
+              className: 'dashboard-sample-image',
+              alt: '', // Mark image as presentation only (a11y).
+              src: (defaultImage ? '../' : webdavServerPluginUrl) + imagePath
+            })
+          );
+
+          goog.dom.appendChild(this.samplesContainer, cD('a', {
               className: 'dashboard-sample',
               target: '_blank',
               href: openUrl,
               id: sampleId
             },
-            cD('img', {
-              className: 'dashboard-sample-image',
-              alt: '', // Mark image as presentation only (a11y).
-              src: (defaultImage ? '../' : webdavServerPluginUrl) + imagePath
-            }),
+            dashboardSampleImage,
             cD('div', 'dashboard-sample-name', sampleName),
             cD('div', 'dashboard-sample-labels',
               labelElements
             )
-          )
-
-          goog.dom.appendChild(this.samplesContainer, dashboardSample);
+          ));
 
           if (newSample) {
-            goog.dom.classlist.add(dashboardSample, 'new-dashboard-sample');
+            goog.dom.classlist.add(dashboardSampleImage, 'new-dashboard-sample');
           }
         }
         // add styles before adding the elements.
@@ -230,12 +232,17 @@
       'text-align: center;' +
       '}' +
 
-      '.dashboard-sample.new-dashboard-sample:before {' +
+      '#dashboard-samples-container .dashboard-sample-image-wrp {' +
+      'margin:25px 30px 0px;' +
+      'position: relative;' +
+      '}' +
+
+      '#dashboard-samples-container .new-dashboard-sample:before {' +
       '    content: "";' +
       '    height: 25px;' +
       '    width: 37px;' +
-      '    top: 17px;' +
-      '    left: 25px;' +
+      '    top: -10px;' +
+      '    left: -5px;' +
       '    position: absolute;' +
       '    background: url(../plugin-resources/webdav-server/NewSample.png) no-repeat left;' +
       '}' +
@@ -251,7 +258,7 @@
       'display: inline-block;' +
       'height: 159px;' +
       'width: 125px;' +
-      'margin:25px 30px 0px;' +
+      'margin:0;' +
       'border: 2px solid #cccccc;' +
       '}' +
 
