@@ -263,7 +263,10 @@
       '}' +
 
       '.dashboard-sample {' +
-      'display: inline-block;' +
+      'width: 185px;' +
+      'display: inline-flex;' +
+      'flex-direction: column;' +
+      'align-items: center;' +
       'margin: 10px 50px 10px 50px;' +
       'text-decoration:none;' +
       'position: relative;' +
@@ -281,6 +284,7 @@
       'padding: 1px 6px;' +
       'margin-left: 5px;' +
       'cursor: pointer;' +
+      'white-space: nowrap;' +
       ' }' +
       
       '.dashboard-sample-label {' +
@@ -293,6 +297,10 @@
       'color: #000;' +
       'font-weight: bold;' +
       ' }' +
+
+      '.dashboard-sample-label:first-of-type, .dashboard-new-sample-label:first-of-type {' +
+      'margin-left: 0;' +
+      '}' +
 
 
       '#dashboard-samples-container .dashboard-sample-image:hover {' +
