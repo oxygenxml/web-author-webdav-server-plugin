@@ -112,49 +112,6 @@
     }
 
     parentElement.appendChild(this.samplesContainer);
-
-    if (descriptor && descriptor.trustedHostNotConfigured) {
-      var transparentLayer = cD("div", "not-configured");
-      goog.style.setStyle(
-        transparentLayer,
-        {
-          position: "absolute",
-          top: 0,
-          left: 0,
-          height: "100%",
-          width: "100%",
-          background: "#cdcdcd",
-          opacity: "0.2"
-        }
-      );
-
-      var adminPageLink = href.substring(0, href.length - "oxygen.html".length) + "admin.html#Security";
-      var configureTrustedHostLabel = cD("div", null,
-        [
-          cD("span", {},
-            trDom(msgs.SERVER_NOT_TRUSTED, {
-            '$SERVER': cD("i", {}, window.webdavServerPluginUrl),
-            '$ADM_PAGE': cD("a", {href: adminPageLink}, tr(msgs.ADMINISTRATION_PAGE))
-          }))
-        ]);
-      goog.style.setStyle(
-        configureTrustedHostLabel,
-        {
-          position: "absolute",
-          top: "0em",
-          left: "0em",
-          background: "white",
-          padding: "0.5em",
-          width: "100%",
-          borderBottom: "1px solid #AAAAAA",
-          fontSize: "1.1em",
-          textAlign: "left"
-        }
-      );
-
-      goog.dom.appendChild(this.samplesContainer, transparentLayer);
-      goog.dom.appendChild(this.samplesContainer, configureTrustedHostLabel);
-    }
   };
 
   /**
@@ -337,9 +294,6 @@
   var readonlySaveDialog = null;
   var href = location.href;
   var endIndex = href.indexOf('/app/');
-  if (endIndex === -1) {
-    endIndex = href.indexOf('/static/');
-  }
 
   var baseUrl = href.substring(0, endIndex + 1) + 'plugins-dispatcher/webdav-server/';
   // global variable with the server url.
