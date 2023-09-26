@@ -22,4 +22,8 @@
  <extension type="WebappStaticResourcesFolder" 
   path="resources/" href="webdav-server"/> 
   
+  <extension type="URLHandler" 
+    class="com.oxygenxml.sdksamples.webdav.handler.SamplesURLStreamHandler"/>
+  <context
+    class="com.oxygenxml.sdksamples.webdav.handler.SamplesRootDirProvider"/>
  </plugin>

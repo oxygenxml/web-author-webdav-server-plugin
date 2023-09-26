@@ -56,7 +56,7 @@
 
           // Open the sample document in a new tab when the sample image is clicked.
           var author = sync.util.getURLParameter('author') || tr(msgs.ANONYMOUS_);
-          var openUrl = getUrl(path, ditamap, author, urlParams, highlightedActions);
+          var openUrl = getSampleUrl(path, ditamap, author, urlParams, highlightedActions);
           var sampleName = sample['name'];
           var sampleId = 'sample-title-' + sampleName.replace(/ /g, '-');
 
@@ -182,18 +182,18 @@
    *
    * @return {string} the document url.
    */
-  function getUrl(docUrl, ditamapUrl, authorName, urlParams, highlightedActions) {
+  function getSampleUrl(docUrl, ditamapUrl, authorName, urlParams, highlightedActions) {
     var urlStr = "oxygen.html?";
-    urlStr += 'url=' + getWebdavUrl(docUrl);
+    urlStr += 'url=' + getSamplesOxyUrl(docUrl);
     if (ditamapUrl) {
-      urlStr += '&ditamap=' + getWebdavUrl(ditamapUrl);
+      urlStr += '&ditamap=' + getSamplesOxyUrl(ditamapUrl);
     }
 
     if (urlParams) {
       for (var paramName in urlParams) {
         var paramValue = urlParams[paramName];
         if (paramName === 'diffUrl' || paramName === 'diffBaseUrl' || paramName === 'schematronUrl') {
-          paramValue =  getWebdavUrl(paramValue);
+          paramValue =  getSamplesOxyUrl(paramValue);
         }
         urlStr += '&' + paramName + '=' + paramValue;
       }
@@ -214,8 +214,8 @@
    * @param path The relative path.
    * @return {string} The webdav URL.
    */
-  function getWebdavUrl(path) {
-    return 'webdav-' + encodeURIComponent((webdavServerPluginUrl + path).replace('\\', '/'));
+  function getSamplesOxyUrl(path) {
+    return encodeURIComponent('samples://samples/' + path).replace('\\', '/');
   }
 
   /**
@@ -350,6 +350,20 @@
     window.addEnforcedWebdavUrl && window.addEnforcedWebdavUrl(baseUrl);
   }
 
+  workspace.getFileServersManager().registerFileServerConnector({
+    'id': 'samples-connector',
+    'name': 'Samples Connector',
+    'matches': url => url.indexOf("samples://") === 0,
+    'fileServer': {
+      'login' : function() {},
+      'logout' : function() {},
+      'createRootUrlComponent' : function() {},
+      'getDefaultRootUrl': function() {return "samples://samples/"},
+      'getUrlInfo' : function() {},
+      'getUserName' : function() {}
+    }
+  });
+
   // load samples thumbails.
   goog.events.listen(
     workspace, sync.api.Workspace.EventType.BEFORE_DASHBOARD_LOADED, function() {
@@ -361,9 +375,9 @@
   /**
    * Replace the save action when the the server is readonly.
    */
-  if(decodeURIComponent(sync.util.getURLParameter('url'))
-      .indexOf('plugins-dispatcher/webdav-server/') !== -1) {
-
+  let isSamplesUrl = decodeURIComponent(sync.util.getURLParameter('url')).indexOf('samples://') === 0
+    || decodeURIComponent(sync.util.getURLParameter('url')).indexOf('plugins-dispatcher/webdav-server/') !== -1
+  if(isSamplesUrl && !sync.util.getURLParameter('diffUrl')) {
     var readonlyMode = sync.options.PluginsOptions.getClientOption('webdav_server_plugin_readonly_mode') === 'on' ||
       sync.util.getURLParameter('webdav_disable_save') === 'true';
     if(readonlyMode) {
