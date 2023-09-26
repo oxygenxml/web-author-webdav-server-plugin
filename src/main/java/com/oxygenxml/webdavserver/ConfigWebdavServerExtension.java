@@ -1,4 +1,4 @@
-package com.oxygenxml.sdksamples.webdav;
+package com.oxygenxml.webdavserver;
 
 import java.util.HashMap;
 import java.util.Map;

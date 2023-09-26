@@ -15,7 +15,7 @@
  </runtime>
 
  <extension type="WebappServlet" role="config"
-  class="com.oxygenxml.sdksamples.webdav.ConfigWebdavServerExtension"/>
+  class="com.oxygenxml.webdavserver.ConfigWebdavServerExtension"/>
  <extension type="WebappServlet" 
-  class="com.oxygenxml.sdksamples.webdav.WebappWebdavServlet"/>
+  class="com.oxygenxml.webdavserver.WebappWebdavServlet"/>
 </plugin>

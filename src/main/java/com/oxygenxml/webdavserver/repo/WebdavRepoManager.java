@@ -1,4 +1,4 @@
-package com.oxygenxml.sdksamples.webdav.repo;
+package com.oxygenxml.webdavserver.repo;
 
 import java.io.File;
 import java.io.IOException;
