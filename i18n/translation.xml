@@ -8,42 +8,6 @@
     <language description="Dutch" lang="nl_NL"/>
     <language description="Chinese" lang="zh_CN"/>
   </languageList>
-  <key value="Server_not_trusted" distribution="webauthor">
-    <comment>Message presented when server is not marked as trusted.</comment>
-    <val lang="en_US">The sample files cannot be opened because the built-in WebDAV server, {$SERVER}, is not configured as trusted in the {$ADM_PAGE}.</val>
-    <val lang="de_DE">Die Beispieldateien können nicht geöffnet werden, weil der eingebaute WebDAV-Server, {$SERVER}, nicht als vertrauenswürdig konfiguriert wurde: {$ADM_PAGE}.</val>
-    <val lang="fr_FR">Les fichiers échantillons ne peuvent pas être ouverts car le serveur WebDAV intégré, {$SERVER}, n'est pas configuré comme étant de fiable dans la {$ADM_PAGE}.</val>
-    <val lang="ja_JP">組み込み WebDAV サーバー {$SERVER} が {$ADM_PAGE} で信頼済みとして構成されていないため、サンプルファイルを開くことができません。</val>
-    <val lang="nl_NL">Kan de voorbeeldbestanden niet openen omdat de ingebouwde WebDAV-server, {$SERVER}, niet als vertrouwd is geconfigureerd op de {$ADM_PAGE}.</val>
-    <val lang="zh_CN">无法打开示例文件，因为内置的WebDAV服务器{$SERVER}未在{$ADM_PAGE}中配置为受信任.</val>
-  </key>
-  <key value="Administration_page" distribution="webauthor">
-    <comment>Label for Administration Page.</comment>
-    <val lang="en_US">Administration Page</val>
-    <val lang="de_DE">Administrationsseite</val>
-    <val lang="fr_FR">Page d'administration</val>
-    <val lang="ja_JP">管理ページ</val>
-    <val lang="nl_NL">Beheerpagina</val>
-    <val lang="zh_CN">管理页</val>
-  </key>
-  <key value="Display_samples" distribution="webauthor">
-    <comment>Label for checkbox option for displaying sample documents.</comment>
-    <val lang="en_US">Display samples</val>
-    <val lang="de_DE">Zeige Beispiele</val>
-    <val lang="fr_FR">Afficher les exemples</val>
-    <val lang="ja_JP">サンプルを表示する</val>
-    <val lang="nl_NL">Voorbeelden weergeven</val>
-    <val lang="zh_CN">显示示例</val>
-  </key>
-  <key value="Readonly_mode" distribution="webauthor">
-    <comment>Label for checkbox option for displaying sample documents.</comment>
-    <val lang="en_US">Read-only mode</val>
-    <val lang="de_DE">Schreibgeschützter Modus</val>
-    <val lang="fr_FR">Mode lecture seule</val>
-    <val lang="ja_JP">読み取り専用モード</val>
-    <val lang="nl_NL">Alleen-lezen modus</val>
-    <val lang="zh_CN">只读模式</val>
-  </key>
   <key value="Enforce_server" distribution="webauthor">
     <comment>Label for checkbox option setting the WebDAV server as enforced.</comment>
     <val lang="en_US">Enforce server</val>
@@ -52,51 +16,5 @@
     <val lang="ja_JP">サーバーを強制する</val>
     <val lang="nl_NL">Server afdwingen</val>
     <val lang="zh_CN">强制服务器</val>
-  </key>
-  <key value="WEBDAV_READ_ONLY_MODE_" distribution="webauthor">
-    <val lang="en_US">The WebDAV server is in read-only mode. {$P_START}This means that you can edit
-      and download the document but you cannot save it to the server.{$P_END}{$P_START}Use the
-      {$B_START}Download{$B_END} action from the {$B_START}More{$B_END} submenu to save the document
-      to your computer{$P_END}</val>
-    <val lang="de_DE">Der WebDAV-Server befindet sich im schreibgeschützten Modus. {$P_START}Das
-      bedeutet, dass Sie das Dokument bearbeiten und herunterladen, aber nicht auf dem Server
-      speichern können.{$P_END}{$P_START}Verwenden Sie die {$B_START}Download{$B_END} Aktion aus dem
-      {$B_START}Mehr{$B_END} Untermenü, um das Dokument auf Ihrem Computer zu
-      speichern{$P_END}</val>
-    <val lang="fr_FR">Le serveur WebDAV est en mode lecture seule. {$P_START}Cela signifie que vous
-      pouvez éditer et télécharger le document mais vous ne pouvez pas l'enregistrer sur le
-      serveur.{$P_END}{$P_START}Utilisez l'action {$B_START}Télécharger{$B_END} depuis le sous-menu
-      {$B_START}Plus{$B_END} pour enregistrer le document sur votre ordinateur{$P_END}</val>
-    <val lang="ja_JP"
-      >WebDAVサーバーは、読み取り専用モードです{$P_START}これは、ドキュメントを編集・ダウンロードできますが、サーバーに対して保存できないことを意味します。{$P_END}{$P_START}{$B_START}その他{$B_END}サブメニューの{$B_START}ダウンロード{$B_END}操作を使用して、コンピュータ上にドキュメントを保存します{$P_END}</val>
-    <val lang="nl_NL">De WebDAV-server bevindt zich in de alleen-lezen modus. {$P_START}Dit betekent
-      dat u het document kunt bewerken en downloaden, maar niet kunt opslaan op de
-      server.{$P_END}{$P_START}Gebruik de actie {$B_START}Downloaden{$B_END} in het submenu
-      {$B_START}Meer{$B_END} als u het document wilt opslaan op uw computer{$P_END}</val>
-    <val lang="zh_CN">WebDAV服务器处于只读模式。{$P_START}这意味着您可以编辑和下载文档，但无法将其保存到服务器。{$P_END}{$P_START}使用{$B_START}更多{$B_END}子菜单中的{$B_END}下载{$B_END}操作将文档保存到您的计算机{$P_END}</val>
-  </key>
-  <key value="READ_ONLY_DOCUMENT_" distribution="webauthor">
-    <val lang="en_US">Read-only document</val>
-    <val lang="de_DE">Schreibgeschütztes Dokument</val>
-    <val lang="fr_FR">Document en lecture seule</val>
-    <val lang="ja_JP">読み取り専用ドキュメント</val>
-    <val lang="nl_NL">Alleen-lezen document</val>
-    <val lang="zh_CN">只读文档</val>
-  </key>
-  <key value="ANONYMOUS_" distribution="webauthor">
-    <val lang="en_US">Anonymous</val>
-    <val lang="de_DE">Anonym</val>
-    <val lang="fr_FR">Anonyme</val>
-    <val lang="ja_JP">匿名</val>
-    <val lang="nl_NL">Anoniem</val>
-    <val lang="zh_CN">匿名</val>
-  </key>
-  <key value="SAMPLES_" distribution="webauthor">
-    <val lang="en_US">Samples</val>
-    <val lang="de_DE">Beispiele</val>
-    <val lang="fr_FR">Exemples</val>
-    <val lang="ja_JP">例</val>
-    <val lang="nl_NL">Voorbeelden</val>
-    <val lang="zh_CN">样图</val>
   </key>
 </translation>

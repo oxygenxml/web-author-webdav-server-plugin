@@ -14,16 +14,8 @@
   <library name="target/classes"/>
  </runtime>
 
-<extension type="AdditionalFrameworks" path="framework/"/>
  <extension type="WebappServlet" role="config"
   class="com.oxygenxml.sdksamples.webdav.ConfigWebdavServerExtension"/>
  <extension type="WebappServlet" 
   class="com.oxygenxml.sdksamples.webdav.WebappWebdavServlet"/>
- <extension type="WebappStaticResourcesFolder" 
-  path="resources/" href="webdav-server"/> 
-  
-  <extension type="URLHandler" 
-    class="com.oxygenxml.sdksamples.webdav.handler.SamplesURLStreamHandler"/>
-  <context
-    class="com.oxygenxml.sdksamples.webdav.handler.SamplesRootDirProvider"/>
- </plugin>
+</plugin>

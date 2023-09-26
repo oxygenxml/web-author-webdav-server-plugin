@@ -9,18 +9,7 @@
 	<formats>
 		<format>jar</format>
 	</formats>
-
 	<componentDescriptors>
 		<componentDescriptor>assemblyComponent.xml</componentDescriptor>
 	</componentDescriptors>
-	 <fileSets>
-     <fileSet>
-       <directory>resources</directory>
-       <outputDirectory>/resources</outputDirectory>
-     </fileSet>
-     <fileSet>
-       <directory>framework</directory>
-       <outputDirectory>/framework</outputDirectory>
-     </fileSet>
-  </fileSets>  
 </assembly>

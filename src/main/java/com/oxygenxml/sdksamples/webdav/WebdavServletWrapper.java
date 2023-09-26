@@ -75,9 +75,7 @@ public class WebdavServletWrapper extends WebdavServlet {
     
     optionsStorage = PluginWorkspaceProvider.getPluginWorkspace().getOptionsStorage();
     
-    String option = optionsStorage.getOption(ConfigWebdavServerExtension.READONLY_MODE, "off");
-    this.readOnly = "on".equals(option);
-    optionsStorage.addOptionListener(new ReadonlyOptionListener(this));
+    this.readOnly = false;
   }
   
   @Override
@@ -98,8 +96,9 @@ public class WebdavServletWrapper extends WebdavServlet {
       }
     }
     
-    super.init(config);
     this.loadMappings();
+    
+    super.init(config);
   }
   
   @Override
@@ -376,57 +375,45 @@ public class WebdavServletWrapper extends WebdavServlet {
     pathsMapping = new java.util.HashMap<String, String>();
     
     Properties properties = new Properties();
-    if (propertiesFile.exists()) {
-      try {
-        InputStream in = new FileInputStream(propertiesFile);
-        properties.load(in);
-        in.close();
+    if (!propertiesFile.exists()) {
+      try (BufferedWriter writer = new BufferedWriter(
+          new OutputStreamWriter(new FileOutputStream(propertiesFile)))) {
+        writer.write("/=samples");
       } catch (IOException e) {
-        log.error("WebDAV server plugin : Unable to load the mapping.properties file.", e);
-      }
-      Enumeration<Object> keys = properties.keys();
-      while (keys.hasMoreElements()) {
-        String param = (String) keys.nextElement();
-        pathsMapping.put(param.trim(), properties.getProperty(param).trim());
-      }
-    } else {
-      if (!this.readOnly) {
-        BufferedWriter writer = null;
-        try {
-          writer = new BufferedWriter(
-              new OutputStreamWriter(new FileOutputStream(propertiesFile)));
-          writer.write("/=samples");
-          writer.close();
-        } catch (IOException e) {
-          log.error("WebDAV server plugin : Unable to write mapping.properties file.", e);
-        }
+        log.error("WebDAV server plugin : Unable to write mapping.properties file.", e);
       }
     }
+    
+    try {
+      InputStream in = new FileInputStream(propertiesFile);
+      properties.load(in);
+      in.close();
+    } catch (IOException e) {
+      log.error("WebDAV server plugin : Unable to load the mapping.properties file.", e);
+    }
+    Enumeration<Object> keys = properties.keys();
+    while (keys.hasMoreElements()) {
+      String param = (String) keys.nextElement();
+      pathsMapping.put(param.trim(), properties.getProperty(param).trim());
+    }
+    
     // if there is no ROOT mapping we map to the samples folder
     // if there is no samples folder we create it.
-    File samplesFolder = new File(webdavDir, "samples");
-    if(pathsMapping.get("/") == null) {
+    String rootPathMapping = pathsMapping.get("/");
+    if(rootPathMapping == null) {
+      pathsMapping.put("/", "samples");
+      File samplesFolder = new File(webdavDir, "samples");
       if (!samplesFolder.exists() && !this.readOnly) {
         samplesFolder.mkdir();
       }
-      pathsMapping.put("/", "samples");
-    }
-    String[] sampleEntries = samplesFolder.list();
-    if (sampleEntries == null || sampleEntries.length == 0) {
-      log.warn("Could not find any sample files in folder: " + samplesFolder.getAbsolutePath());
+    } else {
+      File rootFolder = new File(webdavDir, rootPathMapping);
+      if (!rootFolder.exists() && !this.readOnly) {
+        rootFolder.mkdirs();
+      }
     }
     
     log.debug("WebDAV mappings: " + pathsMapping);
-  }
-  
-  /**
-   * Setter for the readonly flag.
-   * 
-   * @param readonly readonly mode.
-   */
-  public void setReadonly(boolean readonly) {
-    log.debug("set readonly :" + readonly);
-    this.readOnly = readonly;
   }
   
   /**
