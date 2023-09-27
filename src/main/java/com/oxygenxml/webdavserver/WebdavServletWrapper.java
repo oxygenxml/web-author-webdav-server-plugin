@@ -87,7 +87,7 @@ public class WebdavServletWrapper extends WebdavServlet {
     if(isTomcat8()) {
       this.webdavDir = new File((File)context.getAttribute(WebappPluginWorkspace.OXYGEN_WEBAPP_DATA_DIR), "webdav-server");
       try {
-        Class<?> repoManager = Class.forName("com.oxygenxml.sdksamples.webdav.repo.WebdavRepoManager");
+        Class<?> repoManager = Class.forName("com.oxygenxml.webdavserver.repo.WebdavRepoManager");
         Method chageLocationMethod = repoManager.getMethod("changeRepoLocation", File.class, ServletContext.class);
         chageLocationMethod.invoke(null, webdavDir, context);
       } catch (ReflectiveOperationException e) {
@@ -327,7 +327,7 @@ public class WebdavServletWrapper extends WebdavServlet {
     } else {
       String path = getRelativePath(req);
       try {
-        Class<?> repoManager = Class.forName("com.oxygenxml.sdksamples.webdav.repo.WebdavRepoManager");
+        Class<?> repoManager = Class.forName("com.oxygenxml.webdavserver.repo.WebdavRepoManager");
         Method handlePutMethod = repoManager.getMethod("handlePut", HttpServletRequest.class, String.class);
         Object wrote = handlePutMethod.invoke(null, req, path);
         if (!Boolean.TRUE.equals(wrote)) {
@@ -437,7 +437,7 @@ public class WebdavServletWrapper extends WebdavServlet {
   private String getFileName(String path) {
     String fileName = "";
     try {
-      Class<?> repoManager = Class.forName("com.oxygenxml.sdksamples.webdav.repo.WebdavRepoManager");
+      Class<?> repoManager = Class.forName("com.oxygenxml.webdavserver.repo.WebdavRepoManager");
       Method getFileNameMethod = repoManager.getMethod("getFileName", String.class);
       fileName = (String)getFileNameMethod.invoke(null, path);
     } catch (ReflectiveOperationException e) {}
@@ -454,7 +454,7 @@ public class WebdavServletWrapper extends WebdavServlet {
   private boolean isFile(String filePath) {
     boolean isFile = false;
     try {
-      Class<?> repoManager = Class.forName("com.oxygenxml.sdksamples.webdav.repo.WebdavRepoManager");
+      Class<?> repoManager = Class.forName("com.oxygenxml.webdavserver.repo.WebdavRepoManager");
       Method isFileMethod = repoManager.getMethod("isFile", String.class);
       isFile = (Boolean)isFileMethod.invoke(null, filePath);
     } catch (ReflectiveOperationException e) {}
