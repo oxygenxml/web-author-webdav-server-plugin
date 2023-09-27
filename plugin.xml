@@ -4,8 +4,8 @@
 
 <plugin
  id="com.oxygenxml.sdksamples.webdav.WebdavServerPlugin"
- name="WebDAV Server"
- description="Runs a builtin WebDAV server with locking support."
+ name="WebDAV Server (deprecated)"
+ description="Runs a builtin WebDAV server with locking support. This plugin is deprecated and will be removed in a future release."
  version="${project.nosnapshot.version}"
  vendor="Syncro Soft"
  class="ro.sync.exml.plugin.Plugin">
