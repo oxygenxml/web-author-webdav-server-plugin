@@ -40,7 +40,7 @@ public class WebappWebdavServlet extends WebappServletPluginExtension {
       resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
-   
+    resp.setContentType("text/plain");
     webdavWrapper.service(req, resp);
   }
   

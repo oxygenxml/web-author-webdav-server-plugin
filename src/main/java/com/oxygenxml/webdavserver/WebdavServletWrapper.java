@@ -121,6 +121,7 @@ public class WebdavServletWrapper extends WebdavServlet {
         response.getWriter().print("{\"trustedHostNotConfigured\": \"true\"}");
       }
     } else {
+      response.setContentType("application/octet-stream");
       super.doGet(request, response);
     }
   }
@@ -255,6 +256,8 @@ public class WebdavServletWrapper extends WebdavServlet {
         return;
       }
     }
+    
+    resp.setContentType("application/octet-stream");
     super.service(req, resp);
   }
 
